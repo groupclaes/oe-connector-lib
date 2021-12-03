@@ -1,2 +1,2 @@
 const oe = require('./src')
-exports.default = oe
+module.exports = oe
