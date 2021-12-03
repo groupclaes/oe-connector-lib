@@ -1,0 +1,29 @@
+{
+  "name": "@groupclaes/oe-connector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/groupclaes/oe-connector-lib.git"
+  },
+  "keywords": [
+    "oe-connector"
+  ],
+  "author": {
+    "name": "Jamie Vangeysel",
+    "email": "jamie.vangeysel@groupclaes.be",
+    "url": "https://jamievangeysel.be"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/groupclaes/oe-connector-lib/issues"
+  },
+  "homepage": "https://github.com/groupclaes/oe-connector-lib#readme",
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
+}
