@@ -80,16 +80,10 @@ module.exports = (function () {
     if (options === undefined) throw new Error('No Options supplied!')
     if (typeof options !== 'object' || options === null) throw new Error('Options must be an object and must not be null!')
 
-    if (Array.isArray(options)) {
-      throw new Error('Options must be an object and not an array!')
-    }
+    if (Array.isArray(options)) throw new Error('Options must be an object and not an array!')
 
     // Validate if options is an empty object
-    if (Object.keys(options).length === 0) {
-      throw new Error('Options must contain at least one property!')
-    }
-
-    // var self = this
+    if (Object.keys(options).length === 0) throw new Error('Options must contain at least one property!')
 
     // validate parameters if not undefined and apply them
     if (options.username !== undefined) {
