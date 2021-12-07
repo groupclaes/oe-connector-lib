@@ -50,7 +50,7 @@ module.exports = (function () {
         }
       }
 
-      const req = http.request(options, res => {
+      let req = http.request(options, res => {
         let body = ''
 
         res.on('data', d => {
@@ -58,7 +58,17 @@ module.exports = (function () {
         })
 
         res.on('end', () => {
-          resolve(body)
+          try {
+            if (body && typeof body === 'string') resolve(JSON.parse(body))
+            resolve(body)
+          } catch (err) {
+            resolve(body)
+          } finally {
+            // do cleanup after resolve
+            body = null
+            res = null
+            req = null
+          }
         })
       })
 
@@ -217,7 +227,7 @@ module.exports = (function () {
 
       case 'object':
         return 'json'
-      
+
       default:
         return typeof param
     }
