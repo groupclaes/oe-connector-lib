@@ -1,7 +1,7 @@
 {
   "name": "@groupclaes/oe-connector",
   "version": "1.0.2",
-  "description": "",
+  "description": "Run OpenEdge ABL Procedures, requires github.com/groupclaes/oe-connector",
   "main": "index.js",
   "scripts": {
     "test": "jest"
@@ -11,7 +11,13 @@
     "url": "git+https://github.com/groupclaes/oe-connector-lib.git"
   },
   "keywords": [
-    "oe-connector"
+    "oe-connector",
+    "openedge",
+    "abl procedure runner",
+    "abl connector",
+    "openedge connector",
+    "precedure",
+    "runner"
   ],
   "author": {
     "name": "Jamie Vangeysel",
