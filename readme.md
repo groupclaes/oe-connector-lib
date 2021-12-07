@@ -2,14 +2,21 @@
 
 # Index
 - [Index](#index)
+- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Require oe-connector](#require-oe-connector)
   - [Running procedures](#running-procedures)
   - [Configuration](#configuration)
 - [Docs](#docs)
-- [FAQ](#faq)
 - [Credits](#credits)
+
+# Prerequisites
+In order to use this package you will need to have an instance of the [oe-connector](https://github.com/groupclaes/oe-connector) running. This library has been designed to work specifically and only with our in-house developed [oe-connector](https://github.com/groupclaes/oe-connector).  
+  
+The connector has been verified to work with OpenEdge version 11.6 and will propbably work with all next version we have not tested this on versions 12 and above.
+
+Please note that this library will require an http connection to the [oe-connector](https://github.com/groupclaes/oe-connector) and thus data between the server and the client will be unencrypted.
 
 # Installation
 ```sh
@@ -25,23 +32,19 @@ const oe = require('@groupclaes/oe-connector')
 ```javascript
 // be sure to call oe.configure() or set env vars before running procedures
 
-/** Standard call without parameters or config */
+/** Run procedure without parameters or config */
 or.run('getStats')
 
-/** Standard call with parameters */
-oe.run('wsv1CheckVat', [
-    "0413970957",
-    "GRO",
-    "MAC,BRA",
+/** Run procedure testProcedure with parameters */
+oe.run('testProcedure', [
+    "string parameter",
     true,
     undefined
   ])
 
-/** Standard call with parameters and options */
-oe.run('wsv1CheckVat', [
-    "0413970957",
-    "GRO",
-    "MAC,BRA",
+/** Run procedure testProcedure with parameters and options */
+oe.run('testProcedure', [
+    "string parameter",
     true,
     undefined
   ], {
@@ -79,10 +82,13 @@ export OE_TIMEWINDOW=60000
 export OE_PARAMDEF_IN=string
 export OE_PARAMDEF_OUT=json
 ```
-__note:__ Both configuration methods work interchangably with each other but vars set in env are allways used as fallback meaning vars set in configure() will have priority above env vars.
+__Note:__ Both configuration methods work interchangably with each other but vars set in env are allways used as fallback meaning vars set in configure() will have priority above env vars.
 # Docs
 
-# FAQ
+Documentation is coming later with release version 1.1
+<!-- # FAQ
+
+NO FAQ's at the moment -->
 
 # Credits
 License under the [MIT](./license.txt) license
