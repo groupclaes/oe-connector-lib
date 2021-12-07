@@ -209,7 +209,7 @@ module.exports = (function () {
 
   const resolveParameterType = function (param) {
     switch (typeof param) {
-      case 'string':
+      case configuration.parameterDefaults.in:
         return
 
       case 'number':
