@@ -91,5 +91,5 @@ Documentation is coming later with release version 1.1
 NO FAQ's at the moment -->
 
 # Credits
-License under the [MIT](./license.txt) license
+License under the [MIT](./license.txt) license  
 Huge thanks to [Thibaut Nijs](https://github.com/FlyingWraptor) for providing [oe-connector](https://github.com/groupclaes/oe-connector)
