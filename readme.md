@@ -66,7 +66,7 @@ oe.configure({
   tw: 60000, // time window in miliseconds
   c: false, // cache enabled
   ct: 3600000, // cache time in miliseconds
-  parameterDefaults: {
+  parameterDefaults: { // there must reflect the default parameters in the oe-connector
     in: string,
     out: json
   }
@@ -92,3 +92,4 @@ NO FAQ's at the moment -->
 
 # Credits
 License under the [MIT](./license.txt) license
+Huge thanks to [Thibaut Nijs](https://github.com/FlyingWraptor) for providing [oe-connector](https://github.com/groupclaes/oe-connector)
