@@ -9,6 +9,7 @@ module.exports = (function () {
    * @param {string} name name of the procedure to be run
    * @param {any[]} parameters provide an empty array when no parameters should be supplied
    * @param {any} options
+   * @returns {Promise<any>} return Promise resolved with result from oe-connector
    */
   const run = function (name, parameters, options) {
     if (name === undefined)
