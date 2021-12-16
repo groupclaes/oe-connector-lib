@@ -32,7 +32,7 @@ module.exports = (function () {
     return new Promise((resolve, reject) => {
       const data = JSON.stringify(request)
 
-      let req = buildWebRequest(data, resolve, reject)
+      let req = buildWebRequest(data.length, resolve, reject)
 
       req.on('error', error => {
         console.error(error)
@@ -62,12 +62,12 @@ module.exports = (function () {
     }
   }
 
-  const buildWebRequest = (data, resolve, reject) => {
+  const buildWebRequest = (dataLength, resolve, reject) => {
     let request
 
     try {
       const requestOptions = buildWebRequestOptions(
-        data.length
+        dataLength
       )
 
       request = http.request(requestOptions, (res) => {
