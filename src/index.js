@@ -32,31 +32,7 @@ module.exports = (function () {
     return new Promise((resolve, reject) => {
       const data = JSON.stringify(request)
 
-      const requestOptions = buildWebRequestOptions(
-        data.length
-      )
-
-      let req = http.request(requestOptions, res => {
-        let body = ''
-
-        res.on('data', d => {
-          body += d
-        })
-
-        res.on('end', () => {
-          try {
-            if (body && typeof body === 'string') resolve(JSON.parse(body))
-            resolve(body)
-          } catch (err) {
-            resolve(body)
-          } finally {
-            // do cleanup after resolve
-            body = null
-            res = null
-            req = null
-          }
-        })
-      })
+      let req = buildWebRequest(data, resolve, reject)
 
       req.on('error', error => {
         console.error(error)
@@ -84,6 +60,42 @@ module.exports = (function () {
         'Content-Length': dataLength
       }
     }
+  }
+
+  const buildWebRequest = (data, resolve, reject) => {
+    let request
+
+    try {
+      const requestOptions = buildWebRequestOptions(
+        data.length
+      )
+
+      request = http.request(requestOptions, (res) => {
+        let body = ''
+
+        res.on('data', buffer => {
+          body += buffer
+        })
+
+        res.on('end', _ => {
+          try {
+            if (body && typeof body === 'string') resolve(JSON.parse(body))
+            resolve(body)
+          } catch (err) {
+            resolve(body)
+          } finally {
+            // do cleanup after resolve
+            body = null
+            res = null
+            request = null
+          }
+        })
+      })
+    } catch (err) {
+      reject(err)
+    }
+
+    return request
   }
 
   /**
