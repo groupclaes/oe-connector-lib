@@ -182,30 +182,24 @@ module.exports = (function () {
     }
   }
 
+  /**
+   * Returns array of valid procedure parameters
+   * @param {any[]} parameters of the procedure
+   * @returns factory of valid procedure parameters
+   */
   const buildParameters = function (parameters) {
     let parameterResult = []
 
     if (parameters && Array.isArray(parameters)) {
       for (const [i, param] of parameters.entries()) {
         if (param === undefined) {
-          parameterResult.push({
-            pos: i + 1,
-            out: true
-          })
-          continue
-        }
-        const paramType = resolveParameterType(param)
-        if (!paramType) {
-          parameterResult.push({
-            pos: i + 1,
-            value: param
-          })
+          parameterResult.push(
+            getOutputParameter(i + 1)
+          )
         } else {
-          parameterResult.push({
-            pos: i + 1,
-            type: paramType,
-            value: param
-          })
+          parameterResult.push(
+            getInputParameter(i + 1, param)
+          )
         }
       }
 
@@ -217,6 +211,46 @@ module.exports = (function () {
     }
   }
 
+  /**
+   * Return the output parameter object
+   * @param {number} index position of the parameter
+   * @returns output parameter object
+   */
+  const getOutputParameter = function (index) {
+    return {
+      pos: index,
+      out: true
+    }
+  }
+
+  /**
+   * Return the input parameter object for value
+   * @param {number} index position of the parameter
+   * @param {any} parameter value
+   * @returns input parameter object
+   */
+  const getInputParameter = function (index, param) {
+    const paramType = resolveParameterType(param)
+    if (!paramType) {
+      return {
+        pos: index,
+        value: param
+      }
+    } else {
+      return {
+        pos: index,
+        type: paramType,
+        value: param
+      }
+    }
+  }
+
+  /**
+   * return the type of parameter supplied as input, if default return undefined
+   * number should be 'integer' and object should be 'json'
+   * @param {any} param 
+   * @returns {string} return the type of the parameter
+   */
   const resolveParameterType = function (param) {
     switch (typeof param) {
       case configuration.parameterDefaults.in:
