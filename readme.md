@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/groupclaes/oe-connector-lib.svg?token=tpEYPD8CxWfr1dytjAz7&branch=master)](https://travis-ci.com/groupclaes/oe-connector-lib) [![Maintainability](https://api.codeclimate.com/v1/badges/d395b0d52f2953f97b6f/maintainability)](https://codeclimate.com/github/groupclaes/oe-connector-lib/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d395b0d52f2953f97b6f/test_coverage)](https://codeclimate.com/github/groupclaes/oe-connector-lib/test_coverage) ![version](https://img.shields.io/badge/version-1.0.4-blue)
 **OE-Connector Library**
 
 # Index
