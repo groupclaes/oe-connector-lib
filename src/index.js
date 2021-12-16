@@ -4,20 +4,6 @@
 const http = require('http')
 
 module.exports = (function () {
-  let configuration = {
-    username: getEnvVariable('OE_USERNAME'),
-    password: getEnvVariable('OE_PASSWORD'),
-    host: getEnvVariable('OE_HOST', 'localhost'),
-    port: getEnvVariable('OE_PORT', 5000),
-    tw: getEnvVariable('OE_TIMEWINDOW', 60000),
-    c: getEnvVariable('OE_CACHE', false),
-    ct: getEnvVariable('OE_CAHCETIME', 3600000),
-    parameterDefaults: {
-      in: getEnvVariable('OE_PARAMDEF_IN', 'string'),
-      out: getEnvVariable('OE_PARAMDEF_OUT', 'json')
-    }
-  }
-
   /**
    * run
    * @param {string} name name of the procedure to be run
@@ -312,6 +298,20 @@ module.exports = (function () {
       }
     } else {
       throw new Error('Name must be supplied!')
+    }
+  }
+
+  let configuration = {
+    username: getEnvVariable('OE_USERNAME'),
+    password: getEnvVariable('OE_PASSWORD'),
+    host: getEnvVariable('OE_HOST', 'localhost'),
+    port: getEnvVariable('OE_PORT', 5000),
+    tw: getEnvVariable('OE_TIMEWINDOW', 60000),
+    c: getEnvVariable('OE_CACHE', false),
+    ct: getEnvVariable('OE_CAHCETIME', 3600000),
+    parameterDefaults: {
+      in: getEnvVariable('OE_PARAMDEF_IN', 'string'),
+      out: getEnvVariable('OE_PARAMDEF_OUT', 'json')
     }
   }
 
