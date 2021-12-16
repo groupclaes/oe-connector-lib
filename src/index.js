@@ -80,7 +80,7 @@ module.exports = (function () {
         res.on('end', _ => {
           try {
             if (body && typeof body === 'string') resolve(JSON.parse(body))
-            resolve(body)
+            else resolve(body)
           } catch (err) {
             resolve(body)
           } finally {
