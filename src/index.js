@@ -63,14 +63,12 @@ module.exports = (function () {
   }
 
   const buildWebRequest = (dataLength, resolve, reject) => {
-    let request
-
     try {
       const requestOptions = buildWebRequestOptions(
         dataLength
       )
 
-      request = http.request(requestOptions, (res) => {
+      return http.request(requestOptions, (res) => {
         let body = ''
 
         res.on('data', buffer => {
@@ -87,15 +85,12 @@ module.exports = (function () {
             // do cleanup after resolve
             body = null
             res = null
-            request = null
           }
         })
       })
     } catch (err) {
       reject(err)
     }
-
-    return request
   }
 
   /**
