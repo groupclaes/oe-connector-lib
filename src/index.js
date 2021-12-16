@@ -25,18 +25,11 @@ module.exports = (function () {
     return new Promise((resolve, reject) => {
       const data = JSON.stringify(request)
 
-      const options = {
-        hostname: configuration.host,
-        port: configuration.port,
-        path: '/api/openedge',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': data.length
-        }
-      }
+      const requestOptions = buildWebRequestOptions(
+        data.length
+      )
 
-      let req = http.request(options, res => {
+      let req = http.request(requestOptions, res => {
         let body = ''
 
         res.on('data', d => {
@@ -66,6 +59,24 @@ module.exports = (function () {
       req.write(data)
       req.end()
     })
+  }
+
+  /**
+   * Build options object to use for the http(s) request
+   * @param {number} dataLength: length of the data to post 
+   * @returns {any} options object fot http(s) request
+   */
+  const buildWebRequestOptions = (dataLength) => {
+    return {
+      hostname: configuration.host,
+      port: configuration.port,
+      path: '/api/openedge',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': dataLength
+      }
+    }
   }
 
   /**
