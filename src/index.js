@@ -1,20 +1,20 @@
-// Copyright 2021-2021 Jamie Vangeysel//
+// Copyright 2021-2021 Jamie Vangeysel
 'use strict'
 
 const http = require('http')
 
 module.exports = (function () {
   let configuration = {
-    username: process.env.OE_USERNAME || undefined,
-    password: process.env.OE_PASSWORD || undefined,
-    host: process.env.OE_HOST || 'localhost',
-    port: process.env.OE_PORT || 5000,
-    tw: process.env.OE_TIMEWINDOW || 60000,
-    c: process.env.OE_CACHE || false,
-    ct: process.env.OE_CAHCETIME || 3600000,
+    username: getEnvVariable('OE_USERNAME'),
+    password: getEnvVariable('OE_PASSWORD'),
+    host: getEnvVariable('OE_HOST', 'localhost'),
+    port: getEnvVariable('OE_PORT', 5000),
+    tw: getEnvVariable('OE_TIMEWINDOW', 60000),
+    c: getEnvVariable('OE_CACHE', false),
+    ct: getEnvVariable('OE_CAHCETIME', 3600000),
     parameterDefaults: {
-      in: process.env.OE_PARAMDEF_IN || 'string',
-      out: process.env.OE_PARAMDEF_OUT || 'json'
+      in: getEnvVariable('OE_PARAMDEF_IN', 'string'),
+      out: getEnvVariable('OE_PARAMDEF_OUT', 'json')
     }
   }
 
@@ -293,6 +293,26 @@ module.exports = (function () {
     }
 
     return payload
+  }
+
+  /**
+   * Retrieves value from environment variable if set, otherwise return defaultValue
+   * @param {string} name of the environmnet variable 
+   * @param {any} defaultValue which should be used if variable is not set
+   * @returns 
+   */
+  const getEnvVariable = function (name, defaultValue) {
+    if (name !== undefined) {
+      if (typeof name === 'string') {
+        const value = process.env[name]
+        if (value) return value
+        return defaultValue
+      } else {
+        throw new Error('name must be a string!')
+      }
+    } else {
+      throw new Error('Name must be supplied!')
+    }
   }
 
   // Explicitly reveal public pointers to the private functions 
