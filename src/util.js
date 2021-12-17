@@ -18,11 +18,7 @@ module.exports = (function () {
     
     const value = process.env[name]
 
-    if (validators.isString(value)) {
-      return value
-    } else {
-      return defaultValue
-    }
+    return validators.isString(value) ? value : defaultValue
   }
 
   return {
