@@ -46,12 +46,7 @@ module.exports = class Configuration {
    */
   configureUsername(username) {
     if (!Validators.isUndefined(username)) {
-      if (!Validators.isString(username))
-        throw new Error('Username must be a string!')
-      if (!username.match('^[a-zA-Z0-9-_]{1,255}$'))
-        throw new Error('Username must contain only letters, numbers, dashes and underscores with a max length of 255 characters!')
-
-      this._conf.username = username
+      this.configureStringIfMatches(username, 'username', '^[a-zA-Z0-9-_]{1,255}$', 'only letters, numbers, dashes and underscores with a max length of 255 characters')
     }
   }
 
@@ -61,12 +56,7 @@ module.exports = class Configuration {
    */
   configurePassword(password) {
     if (!Validators.isUndefined(password)) {
-      if (!Validators.isString(password))
-        throw new Error('Password must be a string!')
-      if (!password.match('^[a-zA-Z0-9-_@$!%*#?&]{1,255}$'))
-        throw new Error('Password must contain only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
-
-      this._conf.password = password
+      this.configureStringIfMatches(password, 'password', '^[a-zA-Z0-9-_@$!%*#?&]{1,255}$', 'only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters')
     }
   }
 
@@ -76,12 +66,7 @@ module.exports = class Configuration {
    */
   configureHost(host) {
     if (!Validators.isUndefined(host)) {
-      if (!Validators.isString(host))
-        throw new Error('Host must be a string!')
-      if (!host.match(/^(?!:\/\/)(?!.{256,})(([a-z0-9][a-z0-9_-]*?)|([a-z0-9][a-z0-9_-]*?\.)+?[a-z]{2,6}?)$/i))
-        throw new Error('Host is invalid should be a valid FQDN or Hostname!')
-
-      this._conf.host = host
+      this.configureStringIfMatches(host, 'host', /^(?!:\/\/)(?!.{256,})(([a-z0-9][a-z0-9_-]*?)|([a-z0-9][a-z0-9_-]*?\.)+?[a-z]{2,6}?)$/i, 'valid FQDN or hostname')
     }
   }
 
@@ -91,14 +76,7 @@ module.exports = class Configuration {
    */
   configurePort(port) {
     if (!Validators.isUndefined(port)) {
-      if (!Validators.isNumber(port))
-        throw new Error('Port must be a number!')
-
-      const number = parseInt(port, 10)
-      if (Validators.isNotBetween(number, 1, 65535))
-        throw new Error('Port must be between 1 and 65535!')
-
-      this._conf.port = number
+      this.configureNumberIfBetween(port, 'port', 1, 65535)
     }
   }
 
@@ -108,14 +86,7 @@ module.exports = class Configuration {
    */
   configureTimeWindow(timeWindow) {
     if (!Validators.isUndefined(timeWindow)) {
-      if (!Validators.isNumber(timeWindow))
-        throw new Error('TimeWindow must be a number!')
-
-      const number = parseInt(timeWindow, 10)
-      if (Validators.isNotBetween(number, 100, 300000))
-        throw new Error('TimeWindow must be between 100 and 300000!')
-
-      this._conf.tw = number
+      this.configureNumberIfBetween(timeWindow, 'tw', 100, 300000)
     }
   }
 
@@ -126,7 +97,7 @@ module.exports = class Configuration {
   configureCacheEnabled(cacheEnabled) {
     if (!Validators.isUndefined(cacheEnabled)) {
       if (!Validators.isBoolean(cacheEnabled))
-        throw new Error('CacheEnabled must be a boolean!')
+        throw new Error('c must be a boolean!')
 
       this._conf.c = cacheEnabled === true
     }
@@ -138,14 +109,7 @@ module.exports = class Configuration {
    */
   configureCacheTime(cacheTime) {
     if (!Validators.isUndefined(cacheTime)) {
-      if (!Validators.isNumber(cacheTime))
-        throw new Error('CacheTime must be a number!')
-
-      const number = parseInt(cacheTime, 10)
-      if (Validators.isNotBetween(number, 60000, 86400000))
-        throw new Error('CacheTime must be between 60000 and 86400000!')
-
-      this._conf.ct = number
+      this.configureNumberIfBetween(cacheTime, 'ct', 60000, 86400000)
     }
   }
 
@@ -174,5 +138,40 @@ module.exports = class Configuration {
       throw new Error('Options must not be an array!')
     if (Object.keys(options).length === 0)
       throw new Error('Options object must contain at least one property!')
+  }
+
+  /**
+   * Set configuration if string matches regexp
+   * @private
+   * @param {string} value to configure
+   * @param {string} name of the option 
+   * @param {string} regexp to match
+   */
+  configureStringIfMatches(value, option, regexp, reason) {
+    if (!Validators.isString(value))
+      throw new Error(`${option} must be a string!`)
+    if (!value.match(regexp))
+      throw new Error(`${option} is invalid should match ${reason}!`)
+
+    this._conf[option] = value
+  }
+
+  /**
+   * Set configuration if number and between min and max param
+   * @private
+   * @param {number} value to configure
+   * @param {string} name of the option 
+   * @param {number} min value number
+   * @param {number} max  value number
+   */
+  configureNumberIfBetween(value, option, min, max) {
+    if (!Validators.isNumber(value))
+      throw new Error(`${option} must be a number!`)
+
+    const number = parseInt(value, 10)
+    if (Validators.isNotBetween(number, min, max))
+      throw new Error(`${option} must be between ${min} and ${max}!`)
+
+    this._conf[option] = number
   }
 }

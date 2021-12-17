@@ -13,49 +13,49 @@ test('expect to throw error when options is invalid', () => {
 
   expect(() => oe.configure({
     username: 3000,
-  })).toThrow('Username must be a string!')
+  })).toThrow('username must be a string!')
   expect(() => oe.configure({
     username: '#$%^#kshjfs',
-  })).toThrow('Username must contain only letters, numbers, dashes and underscores with a max length of 255 characters!')
+  })).toThrow('username is invalid should match only letters, numbers, dashes and underscores with a max length of 255 characters!')
 
   expect(() => oe.configure({
     password: 3000,
-  })).toThrow('Password must be a string!')
+  })).toThrow('password must be a string!')
   expect(() => oe.configure({
     password: '  dfjkshgka&*^*'
-  })).toThrow('Password must contain only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
+  })).toThrow('password is invalid should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
 
   expect(() => oe.configure({
     host: 3000,
-  })).toThrow('Host must be a string!')
+  })).toThrow('host must be a string!')
   expect(() => oe.configure({
     host: 'google--fdkjhfjsgs.fkldsjhgs'
-  })).toThrow('Host is invalid should be a valid FQDN or Hostname!')
+  })).toThrow('host is invalid should match valid FQDN or hostname!')
 
   expect(() => oe.configure({
     port: 'hello world'
-  })).toThrow('Port must be a number!')
+  })).toThrow('port must be a number!')
   expect(() => oe.configure({
     port: 78543629734652
-  })).toThrow('Port must be between 1 and 65535!')
+  })).toThrow('port must be between 1 and 65535!')
 
   expect(() => oe.configure({
     tw: 'hello world',
-  })).toThrow('TimeWindow must be a number!')
+  })).toThrow('tw must be a number!')
   expect(() => oe.configure({
     tw: 1
-  })).toThrow('TimeWindow must be between 100 and 300000!')
+  })).toThrow('tw must be between 100 and 300000!')
 
   expect(() => oe.configure({
     c: 'hello world',
-  })).toThrow('CacheEnabled must be a boolean!')
+  })).toThrow('c must be a boolean!')
 
   expect(() => oe.configure({
     ct: 'hello world',
-  })).toThrow('CacheTime must be a number!')
+  })).toThrow('ct must be a number!')
   expect(() => oe.configure({
     ct: 1
-  })).toThrow('CacheTime must be between 60000 and 86400000!')
+  })).toThrow('ct must be between 60000 and 86400000!')
 })
 
 test('oe.configure should apply configuration', () => {
