@@ -4,19 +4,6 @@
 const validators = require('./validators')
 
 module.exports = (function () {
-  /**
-   * Retrieves value from environment variable if set, otherwise return defaultValue
-   * @param {string} name of the environmnet variable 
-   * @param {any} defaultValue which should be used if variable is not set
-   * @returns 
-   */
-  const getEnvVariable = function (name, defaultValue) {
-    validateRequest(name)
-    const value = process.env[name]
-
-    return validators.isString(value) ? value : defaultValue
-  }
-
   const validateRequest = function (name) {
     if (validators.isUndefined(name))
       throw new Error('Name must be supplied!')
@@ -25,6 +12,18 @@ module.exports = (function () {
   }
 
   return {
-    getEnvVariable
+    getEnvVariable: function (name, defaultValue) {
+      validateRequest(name)
+      const value = process.env[name]
+
+      return validators.isString(value) ? value : defaultValue
+    }
   }
 })()
+
+/**
+ * Retrieves value from environment variable if set, otherwise return defaultValue
+ * @param {string} name of the environmnet variable 
+ * @param {any} defaultValue which should be used if variable is not set
+ * @returns 
+ */
