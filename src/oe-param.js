@@ -13,22 +13,22 @@ module.exports = (function () {
    * @param {any} configuration
    * @returns factory of valid procedure parameters
    */
-  const buildParameters = function (parameters, configuration) {
+  const build = function (parameters, configuration) {
     if (!validators.isArray(parameters))
       throw new Error('parameters must be an array!')
     
     const parameterResult = []
 
     for (const [i, param] of parameters.entries()) {
+      let parameter
+
       if (param === undefined) {
-        parameterResult.push(
-          getOutputParameter(i + 1, configuration)
-        )
+        parameter = getOutputParameter(i + 1, configuration)
       } else {
-        parameterResult.push(
-          getInputParameter(i + 1, param, configuration)
-        )
+        parameter = getInputParameter(i + 1, param, configuration)
       }
+
+      parameterResult.push(parameter)
     }
 
     return parameterResult
@@ -91,6 +91,6 @@ module.exports = (function () {
   }
 
   return {
-    build: buildParameters
+    build
   }
 })()
