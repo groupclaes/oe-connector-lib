@@ -15,7 +15,7 @@ test('expect to throw error when options is invalid', () => {
     username: 3000,
   })).toThrow('options.username must be a string!')
   expect(() => oe.configure({
-    username: '#$%ˆ#kshjfs',
+    username: '#$%^#kshjfs',
   })).toThrow('Username must contain only letters, numbers, dashes and underscores with a max length of 255 characters!')
 
   expect(() => oe.configure({
