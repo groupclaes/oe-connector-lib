@@ -3,8 +3,8 @@
 
 const http = require('http')
 const validators = require('./validators')
-const util = require('./util')
 const param = require('./oe-param')
+const Configuration = require('./configuration')
 
 /**
  * run
@@ -81,8 +81,8 @@ function validateOptionsParam(options) {
  */
 function buildWebRequestOptions(dataLength) {
   return {
-    hostname: configuration.host,
-    port: configuration.port,
+    hostname: config.configuration.host,
+    port: config.configuration.port,
     path: '/api/openedge',
     method: 'POST',
     headers: {
@@ -135,7 +135,7 @@ function configure(options) {
   if (options.username !== undefined) {
     if (typeof options.username === 'string') {
       if (options.username.match('^[a-zA-Z0-9-_]{1,255}$')) {
-        configuration.username = options.username
+        config.configuration.username = options.username
       } else {
         throw new Error('Username must contain only letters, numbers, dashes and underscores with a max length of 255 characters!')
       }
@@ -147,7 +147,7 @@ function configure(options) {
   if (options.password !== undefined) {
     if (typeof options.password === 'string') {
       if (options.password.match('^[a-zA-Z0-9-_@$!%*#?&]{1,255}$')) {
-        configuration.password = options.password
+        config.configuration.password = options.password
       } else {
         throw new Error('Password must contain only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
       }
@@ -159,7 +159,7 @@ function configure(options) {
   if (options.host !== undefined) {
     if (typeof options.host === 'string') {
       if (options.host.match(/^(?!:\/\/)(?!.{256,})(([a-z0-9][a-z0-9_-]*?)|([a-z0-9][a-z0-9_-]*?\.)+?[a-z]{2,6}?)$/i)) {
-        configuration.host = options.host
+        config.configuration.host = options.host
       } else {
         throw new Error('options.host is invalid should be a valid FQDN or Hostname!')
       }
@@ -172,7 +172,7 @@ function configure(options) {
     if (typeof options.port === 'number') {
       const number = parseInt(options.port, 10)
       if (number > 0 && number <= 65535) {
-        configuration.port = number
+        config.configuration.port = number
       } else {
         throw new Error('options.port must be between 1 and 65535!')
       }
@@ -185,7 +185,7 @@ function configure(options) {
     if (typeof options.tw === 'number') {
       const number = parseInt(options.tw, 10)
       if (number >= 100 && number <= 300000) {
-        configuration.tw = number
+        config.configuration.tw = number
       } else {
         // range between 100ms and 5m
         throw new Error('options.tw must be between 100 and 300000!')
@@ -197,7 +197,7 @@ function configure(options) {
 
   if (options.c !== undefined) {
     if (typeof options.c === 'boolean') {
-      configuration.c = options.c === true
+      config.configuration.c = options.c === true
     } else {
       throw new Error('options.c must be a boolean!')
     }
@@ -207,7 +207,7 @@ function configure(options) {
     if (typeof options.ct === 'number') {
       const number = parseInt(options.ct, 10)
       if (number >= 60000 && number <= 86400000) {
-        configuration.ct = number
+        config.configuration.ct = number
       } else {
         // range between 1m and 24h
         throw new Error('options.ct must be between 60000 and 86400000!')
@@ -226,16 +226,19 @@ function configure(options) {
  * @returns {any} payload to post to oe-connector
  */
 function buildRequest(name, parameters, options) {
-  const config = {
-    ...configuration,
+  const configuration = {
+    ...config.configuration,
     ...options
   }
+
+  if (name == 'testProcedure')
+  console.log(config.configuration, options, configuration)
 
   const payload = {
     proc: name.indexOf('.') > -1 ? name : `${name}.p`,
     parm: [],
-    tw: config.tw,
-    cache: config.c === true ? config.ct : -1
+    tw: configuration.tw,
+    cache: configuration.c === true ? configuration.ct : -1
   }
 
   const buildParam = param.build(parameters, configuration)
@@ -246,23 +249,11 @@ function buildRequest(name, parameters, options) {
   return payload
 }
 
-let configuration = {
-  username: util.getEnvVariable('OE_USERNAME'),
-  password: util.getEnvVariable('OE_PASSWORD'),
-  host: util.getEnvVariable('OE_HOST', 'localhost'),
-  port: util.getEnvVariable('OE_PORT', 5000),
-  tw: util.getEnvVariable('OE_TIMEWINDOW', 60000),
-  c: util.getEnvVariable('OE_CACHE', false),
-  ct: util.getEnvVariable('OE_CAHCETIME', 3600000),
-  parameterDefaults: {
-    in: util.getEnvVariable('OE_PARAMDEF_IN', 'string'),
-    out: util.getEnvVariable('OE_PARAMDEF_OUT', 'json')
-  }
-}
+const config = new Configuration()
 
 module.exports = {
   run,
   configure,
-  configuration,
+  configuration: config.configuration,
   test: buildRequest
 }
