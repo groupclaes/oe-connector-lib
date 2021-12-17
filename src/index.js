@@ -2,6 +2,8 @@
 'use strict'
 
 const http = require('http')
+const validators = require('./validators')
+const param = require('./oe-param')
 
 module.exports = (function () {
   /**
@@ -12,18 +14,18 @@ module.exports = (function () {
    * @returns {Promise<any>} return Promise resolved with result from oe-connector
    */
   const run = function (name, parameters, options) {
-    if (name === undefined)
+    if (validators.isUndefined(name))
       throw new Error('No name supplied!')
-    if (typeof name !== 'string' || name === null)
+    if (!validators.isString(name) || validators.isNull(name))
       throw new Error('name must be a string and must not be null!')
     if (!name.match(/^[\w\-. ]+$/))
       throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
 
-    if (parameters === undefined)
+    if (validators.isUndefined(parameters))
       throw new Error('No parameters supplied!')
-    if (typeof parameters !== 'object' || parameters === null)
+    if (!validators.isObject(parameters) || validators.isNull(parameters))
       throw new Error('parameters must be an object type array and must not be null!')
-    if (parameters && !Array.isArray(parameters))
+    if (validators.isArray(parameters))
       throw new Error('parameters must be an array!')
 
     const request = buildRequest(name, parameters, options)
@@ -98,12 +100,12 @@ module.exports = (function () {
    * @param {any} options 
    */
   const configure = function (options) {
-    if (options === undefined)
+    if (validators.isUndefined(options))
       throw new Error('No Options supplied!')
-    if (typeof options !== 'object' || options === null)
+    if (!validators.isObject(options) || validators.isNull(options))
       throw new Error('Options must be an object and must not be null!')
 
-    if (Array.isArray(options))
+    if (validators.isArray(options))
       throw new Error('Options must be an object and not an array!')
 
     // Validate if options is an empty object
@@ -198,91 +200,6 @@ module.exports = (function () {
   }
 
   /**
-   * Returns array of valid procedure parameters
-   * @param {any[]} parameters of the procedure
-   * @returns factory of valid procedure parameters
-   */
-  const buildParameters = function (parameters) {
-    let parameterResult = []
-
-    if (parameters && Array.isArray(parameters)) {
-      for (const [i, param] of parameters.entries()) {
-        if (param === undefined) {
-          parameterResult.push(
-            getOutputParameter(i + 1)
-          )
-        } else {
-          parameterResult.push(
-            getInputParameter(i + 1, param)
-          )
-        }
-      }
-
-      return parameterResult
-    } else if (!parameters) {
-      return []
-    } else {
-      throw new Error('parameters must be an array!')
-    }
-  }
-
-  /**
-   * Return the output parameter object
-   * @param {number} index position of the parameter
-   * @returns output parameter object
-   */
-  const getOutputParameter = function (index) {
-    return {
-      pos: index,
-      out: true
-    }
-  }
-
-  /**
-   * Return the input parameter object for value
-   * @param {number} index position of the parameter
-   * @param {any} parameter value
-   * @returns input parameter object
-   */
-  const getInputParameter = function (index, param) {
-    const paramType = resolveParameterType(param)
-    if (!paramType) {
-      return {
-        pos: index,
-        value: param
-      }
-    } else {
-      return {
-        pos: index,
-        type: paramType,
-        value: param
-      }
-    }
-  }
-
-  /**
-   * return the type of parameter supplied as input, if default return undefined
-   * number should be 'integer' and object should be 'json'
-   * @param {any} param 
-   * @returns {string} return the type of the parameter
-   */
-  const resolveParameterType = function (param) {
-    switch (typeof param) {
-      case configuration.parameterDefaults.in:
-        return
-
-      case 'number':
-        return 'integer'
-
-      case 'object':
-        return 'json'
-
-      default:
-        return typeof param
-    }
-  }
-
-  /**
    * @private buildRequest
    * @param {string} name
    * @param {any[]} parameters
@@ -302,7 +219,7 @@ module.exports = (function () {
       cache: config.c === true ? config.ct : -1
     }
 
-    const buildParam = buildParameters(parameters)
+    const buildParam = param.build(parameters, configuration)
     if (buildParam) {
       payload.parm = buildParam
     }
