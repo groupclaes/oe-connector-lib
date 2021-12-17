@@ -6,6 +6,8 @@ const validators = require('./validators')
 const param = require('./oe-param')
 const Configuration = require('./configuration')
 
+const config = new Configuration()
+
 /**
  * run
  * @param {string} name name of the procedure to be run
@@ -139,11 +141,13 @@ function buildRequest(name, parameters, options) {
   return payload
 }
 
-const config = new Configuration()
+function configure(options) {
+  config.configure(options)
+}
 
 module.exports = {
   run,
-  configure: config.configure,
+  configure,
   configuration: config.configuration,
   test: buildRequest
 }

@@ -19,6 +19,10 @@ module.exports = class Configuration {
     }
   }
 
+  constructor() {
+
+  }
+
   /**
    * configure
    * @param {any} options
@@ -47,7 +51,7 @@ module.exports = class Configuration {
       if (!username.match('^[a-zA-Z0-9-_]{1,255}$'))
         throw new Error('Username must contain only letters, numbers, dashes and underscores with a max length of 255 characters!')
 
-      _conf.username = username
+      this._conf.username = username
     }
   }
 
@@ -59,10 +63,10 @@ module.exports = class Configuration {
     if (!Validators.isUndefined(password)) {
       if (!Validators.isString(password))
         throw new Error('Password must be a string!')
-      if (!username.match('^[a-zA-Z0-9-_@$!%*#?&]{1,255}$'))
+      if (!password.match('^[a-zA-Z0-9-_@$!%*#?&]{1,255}$'))
         throw new Error('Password must contain only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
 
-      _conf.password = password
+      this._conf.password = password
     }
   }
 
@@ -74,10 +78,10 @@ module.exports = class Configuration {
     if (!Validators.isUndefined(host)) {
       if (!Validators.isString(host))
         throw new Error('Host must be a string!')
-      if (!options.host.match(/^(?!:\/\/)(?!.{256,})(([a-z0-9][a-z0-9_-]*?)|([a-z0-9][a-z0-9_-]*?\.)+?[a-z]{2,6}?)$/i))
+      if (!host.match(/^(?!:\/\/)(?!.{256,})(([a-z0-9][a-z0-9_-]*?)|([a-z0-9][a-z0-9_-]*?\.)+?[a-z]{2,6}?)$/i))
         throw new Error('Host is invalid should be a valid FQDN or Hostname!')
 
-      _conf.host = options.host
+      this._conf.host = host
     }
   }
 
@@ -94,7 +98,7 @@ module.exports = class Configuration {
       if (number < 1 || number > 65535)
         throw new Error('Port must be between 1 and 65535!')
 
-      _conf.port = number
+      this._conf.port = number
     }
   }
 
@@ -111,7 +115,7 @@ module.exports = class Configuration {
       if (number < 100 || number > 300000)
         throw new Error('TimeWindow must be between 100 and 300000!')
 
-      _conf.tw = number
+      this._conf.tw = number
     }
   }
 
@@ -124,7 +128,7 @@ module.exports = class Configuration {
       if (!Validators.isBoolean(cacheEnabled))
         throw new Error('CacheEnabled must be a boolean!')
 
-      _conf.c = cacheEnabled === true
+      this._conf.c = cacheEnabled === true
     }
   }
 
@@ -135,13 +139,13 @@ module.exports = class Configuration {
   configureCacheTime(cacheTime) {
     if (!Validators.isUndefined(cacheTime)) {
       if (!Validators.isNumber(cacheTime))
-        throw new Error('cacheTime must be a number!')
+        throw new Error('CacheTime must be a number!')
 
       const number = parseInt(cacheTime, 10)
       if (number < 60000 || number > 86400000)
-        throw new Error('cacheTime must be between 60000 and 86400000!')
+        throw new Error('CacheTime must be between 60000 and 86400000!')
 
-      _conf.ct = number
+      this._conf.ct = number
     }
   }
 
@@ -157,7 +161,7 @@ module.exports = class Configuration {
   /**
    * Validate option parameter
    * @private
-   * @param {*} options 
+   * @param {any} options 
    */
   validateOptionsParam(options) {
     if (Validators.isUndefined(options))
