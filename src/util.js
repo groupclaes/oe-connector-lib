@@ -16,13 +16,7 @@ module.exports = (function () {
     if (!validators.isString(name))
       throw new Error('Name must be a string!')
 
-    const value = process.env[name]
-
-    if (validators.isString(value)) {
-      return value
-    }
-
-    return defaultValue
+    return process.env[name] ?? defaultValue
   }
 
   return {
