@@ -11,19 +11,18 @@ module.exports = (function () {
    * @returns 
    */
   const getEnvVariable = function (name, defaultValue) {
-    if (!validators.isUndefined(name)) {
-      if (validators.isString(name)) {
-        const value = process.env[name]
-
-        if (validators.isString(value)) {
-          return value
-        } else {
-          return defaultValue
-        }
-      }
+    if (validators.isUndefined(name))
+      throw new Error('Name must be supplied!')
+    if (!validators.isString(name))
       throw new Error('Name must be a string!')
+    
+    const value = process.env[name]
+
+    if (validators.isString(value)) {
+      return value
+    } else {
+      return defaultValue
     }
-    throw new Error('Name must be supplied!')
   }
 
   return {
