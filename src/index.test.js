@@ -1,15 +1,15 @@
 const oe = require('./index')
 
 test('expect to throw error when options is invalid', () => {
-  expect(() => oe.configure({})).toThrow('Options must contain at least one property!')
+  expect(() => oe.configure({})).toThrow('Options object must contain at least one property!')
 
   expect(() => oe.configure()).toThrow('No Options supplied!')
 
   expect(() => oe.configure(undefined)).toThrow('No Options supplied!')
 
-  expect(() => oe.configure(null)).toThrow('Options must be an object and must not be null!')
+  expect(() => oe.configure(null)).toThrow('Options must not be null!')
 
-  expect(() => oe.configure([12, 23])).toThrow('Options must be an object and not an array!')
+  expect(() => oe.configure([12, 23])).toThrow('Options must not be an array!')
 
   expect(() => oe.configure({
     username: 3000,

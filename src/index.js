@@ -36,7 +36,7 @@ function run(name, parameters, options) {
 
 function validateRunParam(name, parameters) {
   validateNameParam(name)
-  validateParameterParam(parameters)
+  validateParametersParam(parameters)
 }
 
 function validateNameParam(name) {
@@ -50,7 +50,7 @@ function validateNameParam(name) {
     throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
 }
 
-function validateParameterParam(parameters) {
+function validateParametersParam(parameters) {
   if (validators.isUndefined(parameters))
     throw new Error('No parameters supplied!')
   if (validators.isNull(parameters))
@@ -59,6 +59,19 @@ function validateParameterParam(parameters) {
     throw new Error('parameters must be an object (Array)!')
   if (!validators.isArray(parameters))
     throw new Error('parameters must be an array!')
+}
+
+function validateOptionsParam(options) {
+  if (validators.isUndefined(options))
+    throw new Error('No Options supplied!')
+  if (validators.isNull(options))
+    throw new Error('Options must not be null!')
+  if (!validators.isObject(options))
+    throw new Error('Options must be an object!')
+  if (validators.isArray(options))
+    throw new Error('Options must not be an array!')
+  if (Object.keys(options).length === 0)
+    throw new Error('Options object must contain at least one property!')
 }
 
 /**
@@ -115,17 +128,7 @@ function buildWebRequest(dataLength, resolve, reject) {
  * @param {any} options 
  */
 function configure(options) {
-  if (validators.isUndefined(options))
-    throw new Error('No Options supplied!')
-  if (!validators.isObject(options) || validators.isNull(options))
-    throw new Error('Options must be an object and must not be null!')
-
-  if (validators.isArray(options))
-    throw new Error('Options must be an object and not an array!')
-
-  // Validate if options is an empty object
-  if (Object.keys(options).length === 0)
-    throw new Error('Options must contain at least one property!')
+  validateOptionsParam(options)
 
   // validate parameters if not undefined and apply them
   if (options.username !== undefined) {
