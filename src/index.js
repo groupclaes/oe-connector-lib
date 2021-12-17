@@ -124,9 +124,6 @@ function buildRequest(name, parameters, options) {
     ...options
   }
 
-  if (name == 'testProcedure')
-  console.log(config.configuration, options, configuration)
-
   const payload = {
     proc: name.indexOf('.') > -1 ? name : `${name}.p`,
     parm: [],
