@@ -76,7 +76,8 @@ module.exports = (function () {
    * @returns {string} return the type of the parameter
    */
   const resolveParameterType = function (param, configuration) {
-    switch (typeof param) {
+    const paramType = typeof param
+    switch (paramType) {
       case configuration.parameterDefaults.in:
         return
 
@@ -85,10 +86,8 @@ module.exports = (function () {
 
       case 'object':
         return 'json'
-
-      default:
-        return typeof param
     }
+    return paramType
   }
 
   return {
