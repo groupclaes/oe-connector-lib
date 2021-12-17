@@ -1,7 +1,7 @@
 // Copyright 2021-2021 Jamie Vangeysel
 'use strict'
 
-const validators = require('./validators')
+const validators = require('./validators').Validators
 
 /**
  * 

@@ -2,7 +2,7 @@
 'use strict'
 
 const http = require('http')
-const validators = require('./validators')
+const validators = require('./validators').Validators
 const util = require('./util')
 const param = require('./oe-param')
 
