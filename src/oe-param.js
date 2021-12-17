@@ -14,27 +14,24 @@ module.exports = (function () {
    * @returns factory of valid procedure parameters
    */
   const buildParameters = function (parameters, configuration) {
+    if (!validators.isArray(parameters))
+      throw new Error('parameters must be an array!')
+    
     const parameterResult = []
 
-    if (validators.isArray(parameters)) {
-      for (const [i, param] of parameters.entries()) {
-        if (param === undefined) {
-          parameterResult.push(
-            getOutputParameter(i + 1, configuration)
-          )
-        } else {
-          parameterResult.push(
-            getInputParameter(i + 1, param, configuration)
-          )
-        }
+    for (const [i, param] of parameters.entries()) {
+      if (param === undefined) {
+        parameterResult.push(
+          getOutputParameter(i + 1, configuration)
+        )
+      } else {
+        parameterResult.push(
+          getInputParameter(i + 1, param, configuration)
+        )
       }
-
-      return parameterResult
-    } else if (!parameters) {
-      return []
-    } else {
-      throw new Error('parameters must be an array!')
     }
+
+    return parameterResult
   }
 
   /**
@@ -58,19 +55,17 @@ module.exports = (function () {
    * @returns input parameter object
    */
   const getInputParameter = function (index, param, configuration) {
-    const paramType = resolveParameterType(param, configuration)
-    if (!paramType) {
-      return {
-        pos: index,
-        value: param
-      }
-    } else {
-      return {
-        pos: index,
-        type: paramType,
-        value: param
-      }
+    const parameter = {
+      pos: index,
+      value: param,
+      type: resolveParameterType(param, configuration)
     }
+
+    if (!parameter.type) {
+      delete parameter.type
+    }
+
+    return parameter
   }
 
   /**
