@@ -2,7 +2,7 @@
 'use strict'
 
 const http = require('http')
-const validators = require('./validators').Validators
+const validators = require('./validators')
 const util = require('./util')
 const param = require('./oe-param')
 
@@ -94,9 +94,7 @@ function buildWebRequestOptions(dataLength) {
 
 function buildWebRequest(dataLength, resolve, reject) {
   try {
-    const requestOptions = buildWebRequestOptions(
-      dataLength
-    )
+    const requestOptions = buildWebRequestOptions(dataLength)
 
     return http.request(requestOptions, (res) => {
       let body = ''
@@ -107,8 +105,11 @@ function buildWebRequest(dataLength, resolve, reject) {
 
       res.on('end', _ => {
         try {
-          if (body && typeof body === 'string') resolve(JSON.parse(body))
-          else resolve(body)
+          if (body && typeof body === 'string') {
+            resolve(JSON.parse(body))
+            return
+          }
+          resolve(body)
         } catch (err) {
           resolve(body)
         } finally {

@@ -1,7 +1,7 @@
 // Copyright 2021-2021 Jamie Vangeysel
 'use strict'
 
-const validators = require('./validators').Validators
+const validators = require('./validators')
 
 /**
  * Returns array of valid procedure parameters
