@@ -27,7 +27,6 @@ function run(name, parameters, options) {
     let req = buildWebRequest(data.length, resolve, reject)
 
     req.on('error', error => {
-      console.error(error)
       reject(error)
     })
 
