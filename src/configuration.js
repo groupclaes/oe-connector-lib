@@ -95,7 +95,7 @@ module.exports = class Configuration {
         throw new Error('Port must be a number!')
 
       const number = parseInt(port, 10)
-      if (number < 1 || number > 65535)
+      if (Validators.isNotBetween(number, 1, 65535))
         throw new Error('Port must be between 1 and 65535!')
 
       this._conf.port = number
@@ -112,7 +112,7 @@ module.exports = class Configuration {
         throw new Error('TimeWindow must be a number!')
 
       const number = parseInt(timeWindow, 10)
-      if (number < 100 || number > 300000)
+      if (Validators.isNotBetween(number, 100, 300000))
         throw new Error('TimeWindow must be between 100 and 300000!')
 
       this._conf.tw = number
@@ -142,7 +142,7 @@ module.exports = class Configuration {
         throw new Error('CacheTime must be a number!')
 
       const number = parseInt(cacheTime, 10)
-      if (number < 60000 || number > 86400000)
+      if (Validators.isNotBetween(number, 60000, 86400000))
         throw new Error('CacheTime must be between 60000 and 86400000!')
 
       this._conf.ct = number
