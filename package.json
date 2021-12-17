@@ -30,6 +30,15 @@
   },
   "homepage": "https://github.com/groupclaes/oe-connector-lib#readme",
   "devDependencies": {
-    "jest": "^27.3.1"
+    "jest": "^27.3.1",
+    "jest-cli": "^27.4.5"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "html"
+    ]
   }
 }
