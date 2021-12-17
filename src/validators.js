@@ -8,7 +8,7 @@ module.exports = class Validators {
   static isObject = (value) => typeof value === 'object'
   static isNull = (value) => value === null
   static isUndefined = (value) => value === undefined
-  static isArray = (value) => value && Array.isArray(value)
+  static isArray = (value) => Array.isArray(value)
   static isBetween = (value, min, max) => value >= min && value <= max
   static isNotBetween = (value, min, max) => value < min || value > max
 }

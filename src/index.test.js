@@ -1,64 +1,6 @@
 const oe = require('./index')
 
-test('expect to throw error when options is invalid', () => {
-  expect(() => oe.configure({})).toThrow('Options object must contain at least one property!')
-
-  expect(() => oe.configure()).toThrow('No Options supplied!')
-
-  expect(() => oe.configure(undefined)).toThrow('No Options supplied!')
-
-  expect(() => oe.configure(null)).toThrow('Options must not be null!')
-
-  expect(() => oe.configure([12, 23])).toThrow('Options must not be an array!')
-
-  expect(() => oe.configure({
-    username: 3000,
-  })).toThrow('username must be a string!')
-  expect(() => oe.configure({
-    username: '#$%^#kshjfs',
-  })).toThrow('username is invalid should match only letters, numbers, dashes and underscores with a max length of 255 characters!')
-
-  expect(() => oe.configure({
-    password: 3000,
-  })).toThrow('password must be a string!')
-  expect(() => oe.configure({
-    password: '  dfjkshgka&*^*'
-  })).toThrow('password is invalid should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
-
-  expect(() => oe.configure({
-    host: 3000,
-  })).toThrow('host must be a string!')
-  expect(() => oe.configure({
-    host: 'google--fdkjhfjsgs.fkldsjhgs'
-  })).toThrow('host is invalid should match valid FQDN or hostname!')
-
-  expect(() => oe.configure({
-    port: 'hello world'
-  })).toThrow('port must be a number!')
-  expect(() => oe.configure({
-    port: 78543629734652
-  })).toThrow('port must be between 1 and 65535!')
-
-  expect(() => oe.configure({
-    tw: 'hello world',
-  })).toThrow('tw must be a number!')
-  expect(() => oe.configure({
-    tw: 1
-  })).toThrow('tw must be between 100 and 300000!')
-
-  expect(() => oe.configure({
-    c: 'hello world',
-  })).toThrow('c must be a boolean!')
-
-  expect(() => oe.configure({
-    ct: 'hello world',
-  })).toThrow('ct must be a number!')
-  expect(() => oe.configure({
-    ct: 1
-  })).toThrow('ct must be between 60000 and 86400000!')
-})
-
-test('oe.configure should apply configuration', () => {
+test('oe.test testProcedure should return valid payload', () => {
   oe.configure({
     username: 'username',
     password: 'password',
@@ -69,16 +11,6 @@ test('oe.configure should apply configuration', () => {
     ct: 60000
   })
 
-  expect(oe.configuration.username).toMatch('username')
-  expect(oe.configuration.password).toMatch('password')
-  expect(oe.configuration.host).toMatch('localhost')
-  expect(oe.configuration.port).toBe(5000)
-  expect(oe.configuration.tw).toBe(2000)
-  expect(oe.configuration.c).toBe(true)
-  expect(oe.configuration.ct).toBe(60000)
-})
-
-test('oe.test testProcedure should return valid payload', () => {
   expect(oe.test('testProcedure', [
     "testProcedure", // string parameter
     true, // boolean parameter
@@ -149,6 +81,11 @@ test('oe.run should Throw when incorrect arguments are supplied', () => {
   expect(() => oe.run('validName', {})).toThrow('parameters must be an array!')
 })
 
-// test('oe.run should complete successfully', async () => {
-
-// })
+test('oe.run should reject when no connection to host', async () => {
+  expect.assertions(1)
+  try {
+    await oe.run('test.p', [])
+  } catch (e) {
+    expect(e).toBeTruthy()
+  }
+})
