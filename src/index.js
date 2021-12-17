@@ -14,19 +14,7 @@ const param = require('./oe-param')
  * @returns {Promise<any>} return Promise resolved with result from oe-connector
  */
 function run(name, parameters, options) {
-  if (validators.isUndefined(name))
-    throw new Error('No name supplied!')
-  if (!validators.isString(name) || validators.isNull(name))
-    throw new Error('name must be a string and must not be null!')
-  if (!name.match(/^[\w\-. ]+$/))
-    throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
-
-  if (validators.isUndefined(parameters))
-    throw new Error('No parameters supplied!')
-  if (!validators.isObject(parameters) || validators.isNull(parameters))
-    throw new Error('parameters must be an object type array and must not be null!')
-  if (validators.isArray(parameters))
-    throw new Error('parameters must be an array!')
+  validateRunParameters()
 
   const request = buildRequest(name, parameters, options)
 
@@ -44,6 +32,22 @@ function run(name, parameters, options) {
     req.write(data)
     req.end()
   })
+}
+
+function validateRunParameters(name, parameters) {
+  if (validators.isUndefined(name))
+    throw new Error('No name supplied!')
+  if (!validators.isString(name) || validators.isNull(name))
+    throw new Error('name must be a string and must not be null!')
+  if (!name.match(/^[\w\-. ]+$/))
+    throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
+
+  if (validators.isUndefined(parameters))
+    throw new Error('No parameters supplied!')
+  if (!validators.isObject(parameters) || validators.isNull(parameters))
+    throw new Error('parameters must be an object type array and must not be null!')
+  if (validators.isArray(parameters))
+    throw new Error('parameters must be an array!')
 }
 
 /**
