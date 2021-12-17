@@ -14,7 +14,7 @@ const param = require('./oe-param')
  * @returns {Promise<any>} return Promise resolved with result from oe-connector
  */
 function run(name, parameters, options) {
-  validateRunParameters(name, parameters)
+  validateRunParam(name, parameters)
 
   const request = buildRequest(name, parameters, options)
 
@@ -34,7 +34,12 @@ function run(name, parameters, options) {
   })
 }
 
-function validateRunParameters(name, parameters) {
+function validateRunParam(name, parameters) {
+  validateNameParam(name)
+  validateParameterParam(parameters)
+}
+
+function validateNameParam(name) {
   if (validators.isUndefined(name))
     throw new Error('No name supplied!')
   if (validators.isNull(name))
@@ -43,7 +48,9 @@ function validateRunParameters(name, parameters) {
     throw new Error('name must be a string!')
   if (!name.match(/^[\w\-. ]+$/))
     throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
+}
 
+function validateParameterParam(parameters) {
   if (validators.isUndefined(parameters))
     throw new Error('No parameters supplied!')
   if (validators.isNull(parameters))
