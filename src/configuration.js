@@ -78,10 +78,7 @@ module.exports = class Configuration {
    */
   configureSsl(ssl) {
     if (!Validators.isUndefined(ssl)) {
-      if (!Validators.isBoolean(ssl))
-        throw new Error('ssl must be a boolean!')
-
-      this._conf.ssl = ssl === true
+      this.configureBoolean(ssl, 'ssl')
     }
   }
 
@@ -111,10 +108,7 @@ module.exports = class Configuration {
    */
   configureCacheEnabled(cacheEnabled) {
     if (!Validators.isUndefined(cacheEnabled)) {
-      if (!Validators.isBoolean(cacheEnabled))
-        throw new Error('c must be a boolean!')
-
-      this._conf.c = cacheEnabled === true
+      this.configureBoolean(cacheEnabled, 'c')
     }
   }
 
@@ -188,5 +182,12 @@ module.exports = class Configuration {
       throw new Error(`${option} must be between ${min} and ${max}!`)
 
     this._conf[option] = number
+  }
+
+  configureBoolean(value, option) {
+    if (!Validators.isBoolean(value))
+      throw new Error(`${option} must be a boolean!`)
+
+    this._conf[option] = value
   }
 }
