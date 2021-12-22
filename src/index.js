@@ -1,7 +1,6 @@
 // Copyright 2021-2021 Jamie Vangeysel
 'use strict'
 
-const http = require('http')
 const validators = require('./validators')
 const param = require('./oe-param')
 const Configuration = require('./configuration')
@@ -84,20 +83,19 @@ function buildWebRequest(dataLength, resolve, reject) {
   try {
     const requestOptions = buildWebRequestOptions(dataLength)
 
-    return http.request(requestOptions, (res) => {
+    // use http or https depending on configuration
+    const webhost = config.configuration.ssl === true ? require('https') : require('http')
+
+    return webhost.request(requestOptions, (res) => {
       let body = ''
-
-      res.on('data', buffer => {
-        body += buffer
-      })
-
+      res.on('data', buffer => { body += buffer })
       res.on('end', _ => {
         try {
           if (body && typeof body === 'string') {
             resolve(JSON.parse(body))
-            return
+          } else {
+            resolve(body)
           }
-          resolve(body)
         } catch (err) {
           resolve(body)
         } finally {
