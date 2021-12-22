@@ -9,6 +9,7 @@ module.exports = class Configuration {
     username: util.getEnvVariable('OE_USERNAME'),
     password: util.getEnvVariable('OE_PASSWORD'),
     host: util.getEnvVariable('OE_HOST', 'localhost'),
+    ssl: util.getEnvVariable('OE_SSL', false),
     port: util.getEnvVariable('OE_PORT', 5000),
     tw: util.getEnvVariable('OE_TIMEWINDOW', 60000),
     c: util.getEnvVariable('OE_CACHE', false),
@@ -34,6 +35,7 @@ module.exports = class Configuration {
     this.configureUsername(options.username)
     this.configurePassword(options.password)
     this.configureHost(options.host)
+    this.configureSsl(options.ssl)
     this.configurePort(options.port)
     this.configureTimeWindow(options.tw)
     this.configureCacheEnabled(options.c)
@@ -67,6 +69,19 @@ module.exports = class Configuration {
   configureHost(host) {
     if (!Validators.isUndefined(host)) {
       this.configureStringIfMatches(host, 'host', /^(?!:\/\/)(?!.{256,})(([a-z0-9][a-z0-9_-]*?)|([a-z0-9][a-z0-9_-]*?\.)+?[a-z]{2,6}?)$/i, 'valid FQDN or hostname')
+    }
+  }
+
+  /**
+   * Configure ssl
+   * @param {boolean | undefined} ssl
+   */
+  configureSsl(ssl) {
+    if (!Validators.isUndefined(ssl)) {
+      if (!Validators.isBoolean(ssl))
+        throw new Error('ssl must be a boolean!')
+
+      this._conf.ssl = ssl === true
     }
   }
 
