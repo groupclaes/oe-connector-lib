@@ -89,3 +89,36 @@ test('oe.run should reject when no connection to host', async () => {
     expect(e).toBeTruthy()
   }
 })
+
+test('oe.run should return value', async() => {
+  jest.mock('https', () => ({
+    ...jest.requireActual('https'), // import and retain the original functionalities
+    request: (post_option, cb) => cb({
+      on: (data, cb) => cb(Buffer.from(`{"title": "OK", "description": null, "proc": "test.p", "status": 200, "result": {"status": true}}`, 'utf8')),
+      statusCode: 200,
+      statusMessage: 'OK'
+    }),
+    on: jest.fn(),
+    write: jest.fn(),
+    end: jest.fn()
+  }))
+
+  oe.configure({
+    host: 'oe-server',
+    ssl: true,
+    c: false,
+    tw: 500
+  })
+
+  const req = await oe.run('test.p', [])
+
+  expect(req).toStrictEqual({
+    title: 'OK',
+    description: null,
+    proc: 'test.p',
+    status: 200,
+    result: {
+      status: true
+    }
+  })
+})
