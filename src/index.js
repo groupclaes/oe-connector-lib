@@ -85,21 +85,17 @@ function buildWebRequest(dataLength, resolve, reject) {
 
     // use http or https depending on configuration
     const webhost = config.configuration.ssl === true ? require('https') : require('http')
-    
+
     return webhost.request(requestOptions, (res) => {
       let body = ''
-
-      res.on('data', buffer => {
-        body += buffer
-      })
-
+      res.on('data', buffer => { body += buffer })
       res.on('end', _ => {
         try {
           if (body && typeof body === 'string') {
             resolve(JSON.parse(body))
-            return
+          } else {
+            resolve(body)
           }
-          resolve(body)
         } catch (err) {
           resolve(body)
         } finally {
