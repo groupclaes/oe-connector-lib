@@ -127,7 +127,12 @@ function buildRequest(name, parameters, options) {
     proc: name.indexOf('.') > -1 ? name : `${name}.p`,
     parm: [],
     tw: configuration.tw,
-    cache: configuration.c === true ? configuration.ct : -1
+    cache: configuration.c === true ? configuration.ct : -1,
+  }
+
+  // If credentials were specified, use them
+  if (options.creds) {
+    payload.creds = configuration.creds
   }
 
   const buildParam = param.build(parameters, configuration)
