@@ -23,7 +23,7 @@ function run(name, parameters, options) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(request)
 
-    let req = buildWebRequest(data.length, resolve, reject)
+    let req = buildWebRequest(data.length, resolve)
 
     req.on('error', error => {
       reject(error)
@@ -79,35 +79,31 @@ function buildWebRequestOptions(dataLength) {
   }
 }
 
-function buildWebRequest(dataLength, resolve, reject) {
-  try {
-    const requestOptions = buildWebRequestOptions(dataLength)
+function buildWebRequest(dataLength, resolve) {
+  const requestOptions = buildWebRequestOptions(dataLength)
 
-    // use http or https depending on configuration
-    const webhost = config.configuration.ssl === true ? require('https') : require('http')
+  // use http or https depending on configuration
+  const webhost = config.configuration.ssl === true ? require('https') : require('http')
 
-    return webhost.request(requestOptions, (res) => {
-      let body = ''
-      res.on('data', buffer => { body += buffer })
-      res.on('end', _ => {
-        try {
-          if (body && typeof body === 'string') {
-            resolve(JSON.parse(body))
-          } else {
-            resolve(body)
-          }
-        } catch (err) {
-          resolve(body)
-        } finally {
-          // do cleanup after resolve
-          body = null
-          res = null
+  return webhost.request(requestOptions, (res) => {
+    let body = ''
+    res.on('data', buffer => { body += buffer })
+    res.on('end', _ => {
+      try {
+        if (body && typeof body === 'string') {
+          resolve(JSON.parse(body))
+          return
         }
-      })
+        resolve(body)
+      } catch (err) {
+        resolve(body)
+      } finally {
+        // do cleanup after resolve
+        body = null
+        res = null
+      }
     })
-  } catch (err) {
-    reject(err)
-  }
+  })
 }
 
 /**

@@ -42,7 +42,11 @@ test('oe.test testProcedure with options should should return valid payload with
   ], {
     c: true,
     ct: 60000,
-    tw: 5000
+    tw: 5000,
+    creds: {
+      user: 'oe-server',
+      password: 'password'
+    }
   })).toStrictEqual({
     proc: "testProcedure.p",
     parm: [
@@ -51,6 +55,10 @@ test('oe.test testProcedure with options should should return valid payload with
       { pos: 3, type: "boolean", value: true },
       { pos: 4, out: true }
     ],
+    creds: {
+      user: 'oe-server',
+      password: 'password'
+    },
     cache: 60000,
     tw: 5000
   })
