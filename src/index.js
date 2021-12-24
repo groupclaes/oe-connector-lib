@@ -86,22 +86,18 @@ function buildWebRequest(dataLength, resolve) {
   const webhost = config.configuration.ssl === true ? require('https') : require('http')
 
   return webhost.request(requestOptions, (res) => {
-    let body = ''
-    res.on('data', buffer => { body += buffer })
-    res.on('end', _ => {
-      try {
-        if (body && typeof body === 'string') {
-          resolve(JSON.parse(body))
-          return
-        }
-        resolve(body)
-      } catch (err) {
-        resolve(body)
-      } finally {
-        // do cleanup after resolve
-        body = null
-        res = null
+    let body
+    res.on('data', buffer => {
+      if (!body) {
+        body = ''
       }
+      body += buffer
+    })
+    res.on('end', _ => {
+      resolve(body && typeof body === 'string' ? JSON.parse(body) : body)
+      // do cleanup after resolve
+      body = null
+      res = null
     })
   })
 }
