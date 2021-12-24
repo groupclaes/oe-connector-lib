@@ -131,7 +131,7 @@ function buildRequest(name, parameters, options) {
   }
 
   // If credentials were specified, use them
-  if (options.creds) {
+  if (configuration.creds) {
     payload.creds = configuration.creds
   }
 
