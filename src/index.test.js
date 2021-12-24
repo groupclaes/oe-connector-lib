@@ -98,7 +98,7 @@ test('oe.run should reject when no connection to host', async () => {
   }
 })
 
-test('oe.run should return value', async() => {
+test('oe.run should return value', async () => {
   jest.mock('https', () => ({
     ...jest.requireActual('https'), // import and retain the original functionalities
     request: (post_option, cb) => cb({
@@ -129,4 +129,27 @@ test('oe.run should return value', async() => {
       status: true
     }
   })
+})
+
+test('oe.run should return body value when not a string', async () => {
+  jest.mock('http', () => ({
+    ...jest.requireActual('http'), // import and retain the original functionalities
+    request: (post_option, cb) => cb({
+      on: (data, cb) => cb(0x43),
+      statusCode: 200,
+      statusMessage: 'OK'
+    }),
+    on: jest.fn(),
+    write: jest.fn(),
+    end: jest.fn()
+  }))
+
+  oe.configure({
+    host: 'yayeet',
+    ssl: false,
+    c: false,
+    tw: 500
+  })
+
+  expect(await oe.run('test.p', [])).toEqual(0x43)
 })
