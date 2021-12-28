@@ -1,7 +1,6 @@
 // Copyright 2021-2021 Jamie Vangeysel
 'use strict'
 
-const http = require('http')
 const validators = require('./validators')
 const param = require('./oe-param')
 const Configuration = require('./configuration')
@@ -24,7 +23,7 @@ function run(name, parameters, options) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(request)
 
-    let req = buildWebRequest(data.length, resolve, reject)
+    let req = buildWebRequest(data.length, resolve)
 
     req.on('error', error => {
       reject(error)
@@ -80,36 +79,27 @@ function buildWebRequestOptions(dataLength) {
   }
 }
 
-function buildWebRequest(dataLength, resolve, reject) {
-  try {
-    const requestOptions = buildWebRequestOptions(dataLength)
+function buildWebRequest(dataLength, resolve) {
+  const requestOptions = buildWebRequestOptions(dataLength)
 
-    return http.request(requestOptions, (res) => {
-      let body = ''
+  // use http or https depending on configuration
+  const webhost = config.configuration.ssl === true ? require('https') : require('http')
 
-      res.on('data', buffer => {
-        body += buffer
-      })
-
-      res.on('end', _ => {
-        try {
-          if (body && typeof body === 'string') {
-            resolve(JSON.parse(body))
-            return
-          }
-          resolve(body)
-        } catch (err) {
-          resolve(body)
-        } finally {
-          // do cleanup after resolve
-          body = null
-          res = null
-        }
-      })
+  return webhost.request(requestOptions, (res) => {
+    let body
+    res.on('data', buffer => {
+      if (!body) {
+        body = ''
+      }
+      body += buffer
     })
-  } catch (err) {
-    reject(err)
-  }
+    res.on('end', _ => {
+      resolve(body && typeof body === 'string' ? JSON.parse(body) : body)
+      // do cleanup after resolve
+      body = null
+      res = null
+    })
+  })
 }
 
 /**
@@ -129,7 +119,12 @@ function buildRequest(name, parameters, options) {
     proc: name.indexOf('.') > -1 ? name : `${name}.p`,
     parm: [],
     tw: configuration.tw,
-    cache: configuration.c === true ? configuration.ct : -1
+    cache: configuration.c === true ? configuration.ct : -1,
+  }
+
+  // If credentials were specified, use them
+  if (configuration.creds) {
+    payload.creds = configuration.creds
   }
 
   const buildParam = param.build(parameters, configuration)

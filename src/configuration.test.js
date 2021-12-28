@@ -189,6 +189,7 @@ test('configure should apply configuration', () => {
     username: 'username',
     password: 'password',
     host: 'localhost',
+    ssl: true,
     port: 5000,
     tw: 2000,
     c: true,
@@ -198,6 +199,7 @@ test('configure should apply configuration', () => {
   expect(config.configuration.username).toMatch('username')
   expect(config.configuration.password).toMatch('password')
   expect(config.configuration.host).toMatch('localhost')
+  expect(config.configuration.ssl).toBe(true)
   expect(config.configuration.port).toBe(5000)
   expect(config.configuration.tw).toBe(2000)
   expect(config.configuration.c).toBe(true)

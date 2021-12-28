@@ -9,6 +9,7 @@ module.exports = class Configuration {
     username: util.getEnvVariable('OE_USERNAME'),
     password: util.getEnvVariable('OE_PASSWORD'),
     host: util.getEnvVariable('OE_HOST', 'localhost'),
+    ssl: util.getEnvVariable('OE_SSL', false),
     port: util.getEnvVariable('OE_PORT', 5000),
     tw: util.getEnvVariable('OE_TIMEWINDOW', 60000),
     c: util.getEnvVariable('OE_CACHE', false),
@@ -34,6 +35,7 @@ module.exports = class Configuration {
     this.configureUsername(options.username)
     this.configurePassword(options.password)
     this.configureHost(options.host)
+    this.configureSsl(options.ssl)
     this.configurePort(options.port)
     this.configureTimeWindow(options.tw)
     this.configureCacheEnabled(options.c)
@@ -71,6 +73,16 @@ module.exports = class Configuration {
   }
 
   /**
+   * Configure ssl
+   * @param {boolean | undefined} ssl
+   */
+  configureSsl(ssl) {
+    if (!Validators.isUndefined(ssl)) {
+      this.configureBoolean(ssl, 'ssl')
+    }
+  }
+
+  /**
    * Configure port
    * @param {number | undefined} port
    */
@@ -96,10 +108,7 @@ module.exports = class Configuration {
    */
   configureCacheEnabled(cacheEnabled) {
     if (!Validators.isUndefined(cacheEnabled)) {
-      if (!Validators.isBoolean(cacheEnabled))
-        throw new Error('c must be a boolean!')
-
-      this._conf.c = cacheEnabled === true
+      this.configureBoolean(cacheEnabled, 'c')
     }
   }
 
@@ -173,5 +182,12 @@ module.exports = class Configuration {
       throw new Error(`${option} must be between ${min} and ${max}!`)
 
     this._conf[option] = number
+  }
+
+  configureBoolean(value, option) {
+    if (!Validators.isBoolean(value))
+      throw new Error(`${option} must be a boolean!`)
+
+    this._conf[option] = value
   }
 }
