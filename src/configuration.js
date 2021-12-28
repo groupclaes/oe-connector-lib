@@ -151,7 +151,7 @@ module.exports = class Configuration {
     if (!Validators.isString(value))
       throw new Error(`${option} must be a string!`)
     if (!value.match(regexp))
-      throw new Error(`${option} is invalid should match ${reason}!`)
+      throw new Error(`${option} is invalid and should match ${reason}!`)
 
     this._conf[option] = value
   }
