@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.com/groupclaes/oe-connector-lib.svg?token=tpEYPD8CxWfr1dytjAz7&branch=master)](https://travis-ci.com/groupclaes/oe-connector-lib) [![Maintainability](https://api.codeclimate.com/v1/badges/d395b0d52f2953f97b6f/maintainability)](https://codeclimate.com/github/groupclaes/oe-connector-lib/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d395b0d52f2953f97b6f/test_coverage)](https://codeclimate.com/github/groupclaes/oe-connector-lib/test_coverage) [![Known Vulnerabilities](https://snyk.io/test/github/groupclaes/oe-connector-lib/badge.svg)](https://snyk.io/test/github/groupclaes/oe-connector-lib)  ![version](https://img.shields.io/badge/version-1.0.4-blue)  
+[![Build Status](https://api.travis-ci.com/groupclaes/oe-connector-lib.svg?token=tpEYPD8CxWfr1dytjAz7&branch=master)](https://travis-ci.com/groupclaes/oe-connector-lib) [![Maintainability](https://api.codeclimate.com/v1/badges/d395b0d52f2953f97b6f/maintainability)](https://codeclimate.com/github/groupclaes/oe-connector-lib/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d395b0d52f2953f97b6f/test_coverage)](https://codeclimate.com/github/groupclaes/oe-connector-lib/test_coverage) [![Known Vulnerabilities](https://snyk.io/test/github/groupclaes/oe-connector-lib/badge.svg)](https://snyk.io/test/github/groupclaes/oe-connector-lib)  ![version](https://img.shields.io/badge/version-1.0.5-blue)  
 
 <!-- [![depenencies](https://status.david-dm.org/gh/groupclaes/oe-connector-lib.svg)](https://david-dm.org/groupclaes/oe-connector-lib) [![devDepenencies](https://status.david-dm.org/gh/groupclaes/oe-connector-lib.svg?type=dev)](https://david-dm.org/groupclaes/oe-connector-lib?type=dev) -->
 
@@ -66,6 +66,7 @@ oe.configure({
   username: 'username', // username for oe-connector
   password: 'password', // password for oe-connector
   host: 'localhost', // oe-connector host must be a valid FQDN or hostname
+  ssl: true, // use SSL to connect to host
   port: 5000, // port number
   tw: 60000, // time window in miliseconds
   c: false, // cache enabled
@@ -81,6 +82,7 @@ oe.configure({
 export OE_USERNAME=username
 export OE_PASSWORD=password
 export OE_HOST=localhost
+export OE_SSL=true
 export OE_PORT=5000
 export OE_TIMEWINDOW=60000
 export OE_PARAMDEF_IN=string
