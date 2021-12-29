@@ -88,7 +88,7 @@ describe('Configuration', () => {
           username: name
         });
   
-      expect(executeFunction).toThrow('username is invalid and should match only letters, numbers, dashes and underscores with a max length of 255 characters!')
+      expect(executeFunction).toThrow('username is invalid and should match only letters, numbers, dashes and underscores with a max length of 32 characters!')
     })
 
     const invalidPasswordStrings = [
@@ -113,7 +113,7 @@ describe('Configuration', () => {
           password: pwd
         });
   
-      expect(executeFunction).toThrow('password is invalid and should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 255 characters!')
+      expect(executeFunction).toThrow('password is invalid and should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 32 characters!')
     })
 
     const invalidFqdnHostnames = [

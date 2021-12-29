@@ -1,5 +1,4 @@
 const { describe, expect, test } = require('@jest/globals')
-
 const oe = require('./index')
 
 describe('OpenEdge', () => {
@@ -50,7 +49,11 @@ describe('OpenEdge', () => {
           { pos: 4, out: true }
         ],
         cache: 60000,
-        tw: 5000
+        tw: 5000,
+        creds: {
+          user: 'oe-server',
+          password: 'password'
+        }
       }
       oe.configure({
         host: 'oe-server.example.com',
@@ -67,7 +70,11 @@ describe('OpenEdge', () => {
       ], {
         c: true,
         ct: 60000,
-        tw: 5000
+        tw: 5000,
+        creds: {
+          user: 'oe-server',
+          password: 'password'
+        }
       })
 
       expect(result).toStrictEqual(expectedResult)
@@ -106,7 +113,7 @@ describe('OpenEdge', () => {
         tw: 500
       })
 
-      expect(() => oe.run(value)).toThrow('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
+      expect(() => oe.run(value)).toThrow('Name is invalid, should only contain letters, numbers or special characters: -._ or a space (path is optional)!')
     })
 
     const invalidArguments = [
@@ -141,6 +148,70 @@ describe('OpenEdge', () => {
       })
 
       expect(() => oe.run('CheckVat', null)).toThrow('parameters must not be null!')
+    })
+    test('Should reject when no connection to host', async () => {
+      expect.assertions(1)
+      try {
+        await oe.run('test.p', [])
+      } catch (e) {
+        expect(e).toBeTruthy()
+      }
+    })
+  
+    test('should return value', async () => {
+      jest.mock('https', () => ({
+        ...jest.requireActual('https'), // import and retain the original functionalities
+        request: (post_option, cb) => cb({
+          on: (data, cb) => cb(Buffer.from(`{"title": "OK", "description": null, "proc": "test.p", "status": 200, "result": {"status": true}}`, 'utf8')),
+          statusCode: 200,
+          statusMessage: 'OK'
+        }),
+        on: jest.fn(),
+        write: jest.fn(),
+        end: jest.fn()
+      }))
+    
+      oe.configure({
+        host: 'oe-server',
+        ssl: true,
+        c: false,
+        tw: 500
+      })
+    
+      const req = await oe.run('test.p', [])
+    
+      expect(req).toStrictEqual({
+        title: 'OK',
+        description: null,
+        proc: 'test.p',
+        status: 200,
+        result: {
+          status: true
+        }
+      })
+    })
+    
+    test('should return body value when not a string', async () => {
+      jest.mock('http', () => ({
+        ...jest.requireActual('http'), // import and retain the original functionalities
+        request: (post_option, cb) => cb({
+          on: (data, cb) => cb(0x43),
+          statusCode: 200,
+          statusMessage: 'OK'
+        }),
+        on: jest.fn(),
+        write: jest.fn(),
+        end: jest.fn()
+      }))
+    
+      oe.configure({
+        host: 'yayeet',
+        ssl: false,
+        c: false,
+        tw: 500
+      })
+    
+      expect(await oe.run('test.p', [])).toEqual(0x43)
     })
   })
 })

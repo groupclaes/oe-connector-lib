@@ -46,8 +46,8 @@ function validateNameParam(name) {
     throw new Error('name must not be null!')
   if (!validators.isString(name))
     throw new Error('name must be a string!')
-  if (!name.match(/^[\w\-. ]+$/))
-    throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
+  if (!name.match(/^(([\w- ]{1,223}\/)*)([\w-. ]{1,32})$/))
+    throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space (path is optional)!')
 }
 
 function validateParametersParam(parameters) {
