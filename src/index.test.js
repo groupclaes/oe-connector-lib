@@ -81,7 +81,7 @@ test('oe.run should Throw when incorrect arguments are supplied', () => {
   expect(() => oe.run()).toThrow('No name supplied!')
   expect(() => oe.run(null)).toThrow('name must not be null!')
   expect(() => oe.run(5893475)).toThrow('name must be a string!')
-  expect(() => oe.run('CheckVat?.p')).toThrow('Name is invalid, should only contain letters, numbers or special characters: -._ or a space!')
+  expect(() => oe.run('CheckVat?.p')).toThrow('Name is invalid, should only contain letters, numbers or special characters: -._ or a space (path is optional)!')
 
   expect(() => oe.run('validName')).toThrow('No parameters supplied!')
   expect(() => oe.run('validName', null)).toThrow('parameters must not be null!')
