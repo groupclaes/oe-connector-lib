@@ -48,7 +48,7 @@ module.exports = class Configuration {
    */
   configureUsername(username) {
     if (!Validators.isUndefined(username)) {
-      this.configureStringIfMatches(username, 'username', '^[a-zA-Z0-9-_]{1,12}$', 'only letters, numbers, dashes and underscores with a max length of 12 characters')
+      this.configureStringIfMatches(username, 'username', '^[a-zA-Z0-9-_]{1,32}$', 'only letters, numbers, dashes and underscores with a max length of 32 characters')
     }
   }
 
@@ -58,7 +58,7 @@ module.exports = class Configuration {
    */
   configurePassword(password) {
     if (!Validators.isUndefined(password)) {
-      this.configureStringIfMatches(password, 'password', '^[a-zA-Z0-9-_@$!%*#?&]{1,16}$', 'only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 16 characters')
+      this.configureStringIfMatches(password, 'password', '^[a-zA-Z0-9-_@$!%*#?&]{1,32}$', 'only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 32 characters')
     }
   }
 

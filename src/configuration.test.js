@@ -19,14 +19,14 @@ test('expect configure to throw error when options are invalid', () => {
   })).toThrow('username must be a string!')
   expect(() => config.configure({
     username: '#$%^#kshjfs',
-  })).toThrow('username is invalid should match only letters, numbers, dashes and underscores with a max length of 12 characters!')
+  })).toThrow('username is invalid should match only letters, numbers, dashes and underscores with a max length of 32 characters!')
 
   expect(() => config.configure({
     password: 3000,
   })).toThrow('password must be a string!')
   expect(() => config.configure({
     password: '  dfjkshgka&*^*'
-  })).toThrow('password is invalid should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 16 characters!')
+  })).toThrow('password is invalid should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 32 characters!')
 
   expect(() => config.configure({
     host: 3000,
