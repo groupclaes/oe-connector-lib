@@ -15,6 +15,7 @@ describe('Configuration', () => {
     test('should throw an error when options is empty', () => {
       expect(() => config.configure()).toThrow('No Options supplied!')
     })
+
     test('should throw an error when options is undefined', () => {
       expect(() => config.configure(undefined)).toThrow('No Options supplied!')
     })
@@ -27,6 +28,11 @@ describe('Configuration', () => {
     test('should throw an error when options is null', () => {
       expect(() => config.configure([12, 23])).toThrow('Options must not be an array!')
     })
+
+    test('should throw an error when options is empty object', () => {
+      expect(() => config.configure({})).toThrow('Options object must contain at least one property!')
+    })
+
 
     const invalidNames = [ [1234], [{}], [true], [false], [null] ]
     test.each(invalidNames)('should throw an error when username is not a string', (name) => {
@@ -166,55 +172,87 @@ describe('Configuration', () => {
 
       expect(executeFunction).not.toThrow()
     })
+
+    const invalidCacheValues = [ ['Hello world'], ['true'], ['false'], [1], [2], [0], [{}], [[]], [null] ]
+    test.each(invalidCacheValues)('should throw an error if cache enabled \'c\' is not a boolean', (value) => {
+      const executeFunction = () => config.configure({ c: value })
+
+      expect(executeFunction).toThrow('c must be a boolean!')
+    })
+
+    const validCacheValues = [ [true], [false] ]
+    test.each(validCacheValues)('should not throw if cache enabled \'c\' is valid', (value) => {
+      const executeFunction = () => config.configure({ c: value })
+
+      expect(executeFunction).not.toThrow()
+    })
+
+    const invalidCacheTimeoutValues = [ ['Hello world'], ['true'], ['false'], [true], [false], [{}], [[]], [null] ]
+    test.each(invalidCacheTimeoutValues)('should throw an error if cache time \'ct\' is not a number', (value) => {
+      const executeFunction = () => config.configure({ ct: value })
+
+      expect(executeFunction).toThrow('ct must be a number!')
+    })
+
+    const outOfRangeCacheTimeoutValues = [ [59999], [86400001], [0], [99999999] ]
+    test.each(outOfRangeCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of 60000 and 86400000', (value) => {
+      const executeFunction = () => config.configure({ ct: value })
+
+      expect(executeFunction).toThrow('ct must be between 60000 and 86400000!')
+    })
+
+    const validCacheTimeoutValues = [ [60000], [86400000], [100000], [1234567] ]
+    test.each(validCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of 60000 and 86400000', (value) => {
+      const executeFunction = () => config.configure({ ct: value })
+
+      expect(executeFunction).not.toThrow()
+    })
+
+    test('should apply correct configuration', () => {
+      const validConfiguration = {
+        username: 'username',
+        password: 'password',
+        host: 'localhost',
+        ssl: true,
+        port: 5000,
+        tw: 2000,
+        c: true,
+        ct: 60000
+      }
+
+      const executeFunction = () => config.configure(validConfiguration);
+
+      expect(executeFunction).not.toThrow();
+
+      expect(config.configuration.username).toMatch('username')
+      expect(config.configuration.password).toMatch('password')
+      expect(config.configuration.host).toMatch('localhost')
+      expect(config.configuration.ssl).toBe(true)
+      expect(config.configuration.port).toBe(5000)
+      expect(config.configuration.tw).toBe(2000)
+      expect(config.configuration.c).toBe(true)
+      expect(config.configuration.ct).toBe(60000)
+    })
   })
-})
 
-const config = new Configuration()
-test('expect configure to throw error when options are invalid', () => {
+  describe('configuration', () => {
+    let config
 
-  expect(() => config.configure({
-    c: 'hello world',
-  })).toThrow('c must be a boolean!')
+    beforeEach(() => {
+      config = new Configuration();
+    })
 
-  expect(() => config.configure({
-    ct: 'hello world',
-  })).toThrow('ct must be a number!')
-  expect(() => config.configure({
-    ct: 1
-  })).toThrow('ct must be between 60000 and 86400000!')
-})
+    test('get should be equal to internal _conf', () => {
+      expect(config.configuration).toStrictEqual(config._conf);
+    })
 
-test('configure should apply configuration', () => {
-  config.configure({
-    username: 'username',
-    password: 'password',
-    host: 'localhost',
-    ssl: true,
-    port: 5000,
-    tw: 2000,
-    c: true,
-    ct: 60000
+    test('set should set replace the internal _conf reference', () => {
+      const p = config._conf
+    
+      p.c = false
+      config.configuration = p
+    
+      expect(config._conf).toStrictEqual(p)
+    })
   })
-
-  expect(config.configuration.username).toMatch('username')
-  expect(config.configuration.password).toMatch('password')
-  expect(config.configuration.host).toMatch('localhost')
-  expect(config.configuration.ssl).toBe(true)
-  expect(config.configuration.port).toBe(5000)
-  expect(config.configuration.tw).toBe(2000)
-  expect(config.configuration.c).toBe(true)
-  expect(config.configuration.ct).toBe(60000)
-})
-
-test('get() configuration should equal _conf', () => {
-  expect(config.configuration).toBe(config._conf)
-})
-
-test('set() configuration should apply _conf', () => {
-  const p = config._conf
-
-  p.c = false
-  config.configuration = p
-
-  expect(config._conf).toBe(p)
 })

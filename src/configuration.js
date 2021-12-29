@@ -139,13 +139,13 @@ module.exports = class Configuration {
   validateOptionsParam(options) {
     if (Validators.isUndefined(options))
       throw new Error('No Options supplied!')
-    if (Validators.isNull(options))
+    else if (Validators.isNull(options))
       throw new Error('Options must not be null!')
-    if (!Validators.isObject(options))
+    else if (!Validators.isObject(options))
       throw new Error('Options must be an object!')
-    if (Validators.isArray(options))
+    else if (Validators.isArray(options))
       throw new Error('Options must not be an array!')
-    if (Object.keys(options).length === 0)
+    else if (Object.keys(options).length === 0)
       throw new Error('Options object must contain at least one property!')
   }
 
