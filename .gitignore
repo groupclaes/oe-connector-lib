@@ -119,3 +119,6 @@ dist
 
 data.json
 *.e2e.js
+
+# Feggin macs
+.DS_Store
