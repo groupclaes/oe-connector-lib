@@ -12,6 +12,38 @@ describe('OpenEdge', () => {
           { pos: 2, type: "boolean", value: true },
           { pos: 3, out: true }
         ],
+        cache: 60000,
+        tw: 2000
+      }
+
+      oe.configure({
+        host: 'localhost',
+        port: 5000,
+        tw: 2000,
+        c: true,
+        ct: 60000
+      })
+
+      // Act
+      const result = oe.test('testProcedure', [
+        "testProcedure", // string parameter
+        true, // boolean parameter
+        undefined // undefined (output parameter)
+      ]);
+
+
+      // Assert
+      expect(result).toStrictEqual(expectedResult)
+    })
+    test('Should return valid payload with creds', () => {
+      // Arrange
+      const expectedResult = {
+        proc: "testProcedure.p",
+        parm: [
+          { pos: 1, value: "testProcedure" },
+          { pos: 2, type: "boolean", value: true },
+          { pos: 3, out: true }
+        ],
         creds: {
           user: 'username',
           pwd: 'password',

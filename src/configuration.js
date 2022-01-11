@@ -151,19 +151,15 @@ module.exports = class Configuration {
 
 
     // If there are no creds in config use default if set
-    if (!configuration.creds) {
-      configuration.creds = {
-        user: this.configuration.username,
-        pwd: this.configuration.password,
-        app: this.configuration.app
+    if (!configuration.creds && ((this.configuration.username && this.configuration.password) || this.configuration.app)) {
+      configuration.creds = {}
+
+      if (this.configuration.username && this.configuration.password) {
+        configuration.creds.user = this.configuration.username
+        configuration.creds.pwd = this.configuration.password
       }
-      
-      if (!this.configuration.username || !this.configuration.password) {
-        delete configuration.creds.user
-        delete configuration.creds.pwd
-      }
-      if (!this.configuration.app) {
-        delete configuration.creds.app
+      if (this.configuration.app) {
+        configuration.creds.app = this.configuration.app
       }
     }
 
