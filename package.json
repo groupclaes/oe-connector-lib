@@ -1,6 +1,6 @@
 {
   "name": "@groupclaes/oe-connector",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Run OpenEdge ABL Procedures, requires github.com/groupclaes/oe-connector",
   "main": "index.js",
   "scripts": {
