@@ -12,11 +12,19 @@ describe('OpenEdge', () => {
           { pos: 2, type: "boolean", value: true },
           { pos: 3, out: true }
         ],
+        creds: {
+          user: 'username',
+          pwd: 'password',
+          app: 'app'
+        },
         cache: 60000,
         tw: 2000
       }
 
       oe.configure({
+        username: 'username',
+        password: 'password',
+        app: 'app',
         host: 'localhost',
         port: 5000,
         tw: 2000,
@@ -103,7 +111,7 @@ describe('OpenEdge', () => {
       expect(() => oe.run(5893475)).toThrow('name must be a string!')
     })
 
-    const invalidNames = [ [''], ['CheckVat?.p'], ['CheckV!at.p'], ['Some@Procedure.p'] ]
+    const invalidNames = [[''], ['CheckVat?.p'], ['CheckV!at.p'], ['Some@Procedure.p']]
     test.each(invalidNames)('Should throw when procedure name is not a string', (value) => {
       oe.configure({
         host: 'oe-server.example.com',
@@ -155,7 +163,7 @@ describe('OpenEdge', () => {
         expect(e).toBeTruthy()
       }
     })
-  
+
     test('should return value', async () => {
       jest.mock('https', () => ({
         ...jest.requireActual('https'), // import and retain the original functionalities
@@ -168,16 +176,16 @@ describe('OpenEdge', () => {
         write: jest.fn(),
         end: jest.fn()
       }))
-    
+
       oe.configure({
         host: 'oe-server',
         ssl: true,
         c: false,
         tw: 500
       })
-    
+
       const req = await oe.run('test.p', [])
-    
+
       expect(req).toStrictEqual({
         title: 'OK',
         description: null,
@@ -188,7 +196,7 @@ describe('OpenEdge', () => {
         }
       })
     })
-    
+
     test('should return body value when not a string', async () => {
       jest.mock('http', () => ({
         ...jest.requireActual('http'), // import and retain the original functionalities
@@ -201,14 +209,14 @@ describe('OpenEdge', () => {
         write: jest.fn(),
         end: jest.fn()
       }))
-    
+
       oe.configure({
         host: 'yayeet',
         ssl: false,
         c: false,
         tw: 500
       })
-    
+
       expect(await oe.run('test.p', [])).toEqual(0x43)
     })
   })
