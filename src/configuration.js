@@ -8,6 +8,7 @@ module.exports = class Configuration {
   _conf = {
     username: util.getEnvVariable('OE_USERNAME'),
     password: util.getEnvVariable('OE_PASSWORD'),
+    app: util.getEnvVariable('OE_APP'),
     host: util.getEnvVariable('OE_HOST', 'localhost'),
     ssl: util.getEnvVariable('OE_SSL', false),
     port: util.getEnvVariable('OE_PORT', 5000),
@@ -34,6 +35,7 @@ module.exports = class Configuration {
     // validate parameters if valid & defined => apply them
     this.configureUsername(options.username)
     this.configurePassword(options.password)
+    this.configureApp(options.app)
     this.configureHost(options.host)
     this.configureSsl(options.ssl)
     this.configurePort(options.port)
@@ -59,6 +61,15 @@ module.exports = class Configuration {
   configurePassword(password) {
     if (!Validators.isUndefined(password)) {
       this.configureStringIfMatches(password, 'password', '^[a-zA-Z0-9-_@$!%*#?&]{1,32}$', 'only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 32 characters')
+    }
+  }
+  /**
+   * Configure username
+   * @param {string | undefined} username
+   */
+  configureApp(app) {
+    if (!Validators.isUndefined(app)) {
+      this.configureStringIfMatches(app, 'app', '^[a-zA-Z0-9-_]{1,32}$', 'only letters, numbers, dashes and underscores with a max length of 32 characters')
     }
   }
 
@@ -120,6 +131,39 @@ module.exports = class Configuration {
     if (!Validators.isUndefined(cacheTime)) {
       this.configureNumberIfBetween(cacheTime, 'ct', 60000, 86400000)
     }
+  }
+
+  /**
+   * Build config for request
+   *
+   * @param {*} options parsed to the request
+   * @return {any} configuration object to supply with payload 
+   */
+  build(options) {
+    const configuration = {
+      ...this.configuration,
+      ...options
+    }
+
+    delete configuration.username
+    delete configuration.password
+    delete configuration.app
+
+
+    // If there are no creds in config use default if set
+    if (!configuration.creds && ((this.configuration.username && this.configuration.password) || this.configuration.app)) {
+      configuration.creds = {}
+
+      if (this.configuration.username && this.configuration.password) {
+        configuration.creds.user = this.configuration.username
+        configuration.creds.pwd = this.configuration.password
+      }
+      if (this.configuration.app) {
+        configuration.creds.app = this.configuration.app
+      }
+    }
+
+    return configuration
   }
 
   get configuration() {

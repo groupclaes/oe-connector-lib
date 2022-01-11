@@ -65,6 +65,7 @@ Configuration can be done through 2 different methods: at runtime in code or by 
 oe.configure({
   username: 'username', // username for oe-connector
   password: 'password', // password for oe-connector
+  app: 'custom-app', // app to use on oe-connector
   host: 'localhost', // oe-connector host must be a valid FQDN or hostname
   ssl: true, // use SSL to connect to host
   port: 5000, // port number
@@ -81,6 +82,7 @@ oe.configure({
 // configure oe-connector with env vars
 export OE_USERNAME=username
 export OE_PASSWORD=password
+export OE_APP=custom-app
 export OE_HOST=localhost
 export OE_SSL=true
 export OE_PORT=5000

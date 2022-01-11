@@ -110,10 +110,7 @@ function buildWebRequest(dataLength, resolve) {
  * @returns {any} payload to post to oe-connector
  */
 function buildRequest(name, parameters, options) {
-  const configuration = {
-    ...config.configuration,
-    ...options
-  }
+  const configuration = config.build(options)
 
   const payload = {
     proc: name.indexOf('.') > -1 ? name : `${name}.p`,
@@ -122,14 +119,13 @@ function buildRequest(name, parameters, options) {
     cache: configuration.c === true ? configuration.ct : -1,
   }
 
-  // If credentials were specified, use them
-  if (configuration.creds) {
-    payload.creds = configuration.creds
-  }
-
   const buildParam = param.build(parameters, configuration)
   if (buildParam) {
     payload.parm = buildParam
+  }
+
+  if (configuration.creds) {
+    payload.creds = configuration.creds
   }
 
   return payload
