@@ -34,7 +34,7 @@ describe('Configuration', () => {
     })
 
 
-    const invalidNames = [ [1234], [{}], [true], [false], [null] ]
+    const invalidNames = [[1234], [{}], [true], [false], [null]]
     test.each(invalidNames)('should throw an error when username is not a string', (name) => {
       const executeFunction = () =>
         config.configure({
@@ -42,6 +42,15 @@ describe('Configuration', () => {
         });
 
       expect(executeFunction).toThrow('username must be a string!')
+    })
+
+    test.each(invalidNames)('should throw an error when app is not a string', (name) => {
+      const executeFunction = () =>
+        config.configure({
+          app: name
+        });
+
+      expect(executeFunction).toThrow('app must be a string!')
     })
 
     test.each(invalidNames)('should throw an error when password is not a string', (pwd) => {
@@ -87,7 +96,7 @@ describe('Configuration', () => {
         config.configure({
           username: name
         });
-  
+
       expect(executeFunction).toThrow('username is invalid and should match only letters, numbers, dashes and underscores with a max length of 32 characters!')
     })
 
@@ -112,8 +121,37 @@ describe('Configuration', () => {
         config.configure({
           password: pwd
         });
-  
+
       expect(executeFunction).toThrow('password is invalid and should match only letters, numbers, dashes, underscores or any of the following characters: @$!%*#?& with a max length of 32 characters!')
+    })
+
+    const invalidAppStrings = [
+      [''],
+      [' '],
+      ['a'.repeat(256)],
+      ['normal{'],
+      ['normal\''],
+      ['normal\"'],
+      ['normal+'],
+      ['normal='],
+      ['normal^'],
+      ['normal]'],
+      ['normal('],
+      ['normal['],
+      ['normal}'],
+      ['normal@'],
+      ['normal#'],
+      ['normal$'],
+      ['normal%'],
+      ['normal^'],
+    ]
+    test.each(invalidAppStrings)('should throw an error when the app is a regex failure', (name) => {
+      const executeFunction = () =>
+        config.configure({
+          app: name
+        });
+
+      expect(executeFunction).toThrow('app is invalid and should match only letters, numbers, dashes and underscores with a max length of 32 characters!')
     })
 
     const invalidFqdnHostnames = [
@@ -128,80 +166,80 @@ describe('Configuration', () => {
         config.configure({
           host: hostname
         });
-  
+
       expect(executeFunction).toThrow('host is invalid and should match valid FQDN or hostname!')
-      
+
     })
 
-    const invalidPorts = [ ['hello world'], [true], [false], [null], ['2'] ]
+    const invalidPorts = [['hello world'], [true], [false], [null], ['2']]
     test.each(invalidPorts)('should throw an error when the port is not a number', (value) => {
       const executeFunction = () => config.configure({ port: value });
 
       expect(executeFunction).toThrow('port must be a number!')
     })
-    const invalidPortsValues = [ [-100000], [-1], [0], [65536], [1000000] ]
+    const invalidPortsValues = [[-100000], [-1], [0], [65536], [1000000]]
     test.each(invalidPortsValues)('should throw an error when the port is not in the valid range', (value) => {
       const executeFunction = () => config.configure({ port: value });
 
       expect(executeFunction).toThrow('port must be between 1 and 65535!')
     })
-    
-    const validPortValues = [ [1], [10000], [8080], [25565], [65535] ]
+
+    const validPortValues = [[1], [10000], [8080], [25565], [65535]]
     test.each(validPortValues)('should not throw when the port is in the valid range', (value) => {
       const executeFunction = () => config.configure({ port: value });
 
       expect(executeFunction).not.toThrow()
     })
 
-    const invalidTimeWindow = [ ['hello world'], [''], [null], ['2'] ]
+    const invalidTimeWindow = [['hello world'], [''], [null], ['2']]
     test.each(invalidTimeWindow)('should throw an error when the time window is not a number', (tw) => {
       const executeFunction = () => config.configure({ tw })
 
       expect(executeFunction).toThrow('tw must be a number!')
     })
 
-    const invalidTimeWindowValues = [ [-1], [0], [1], [10], [99], [300001], [23432423] ]
+    const invalidTimeWindowValues = [[-1], [0], [1], [10], [99], [300001], [23432423]]
     test.each(invalidTimeWindowValues)('should throw an error when the time window is not within the valid range', (tw) => {
       const executeFunction = () => config.configure({ tw })
 
       expect(executeFunction).toThrow('tw must be between 100 and 300000!')
     })
-    const validTimeWindowValues = [ [100], [12345], [123456], [300000] ]
+    const validTimeWindowValues = [[100], [12345], [123456], [300000]]
     test.each(validTimeWindowValues)('should throw an error when the time window is not within the valid range', (tw) => {
       const executeFunction = () => config.configure({ tw })
 
       expect(executeFunction).not.toThrow()
     })
 
-    const invalidCacheValues = [ ['Hello world'], ['true'], ['false'], [1], [2], [0], [{}], [[]], [null] ]
+    const invalidCacheValues = [['Hello world'], ['true'], ['false'], [1], [2], [0], [{}], [[]], [null]]
     test.each(invalidCacheValues)('should throw an error if cache enabled \'c\' is not a boolean', (value) => {
       const executeFunction = () => config.configure({ c: value })
 
       expect(executeFunction).toThrow('c must be a boolean!')
     })
 
-    const validCacheValues = [ [true], [false] ]
+    const validCacheValues = [[true], [false]]
     test.each(validCacheValues)('should not throw if cache enabled \'c\' is valid', (value) => {
       const executeFunction = () => config.configure({ c: value })
 
       expect(executeFunction).not.toThrow()
     })
 
-    const invalidCacheTimeoutValues = [ ['Hello world'], ['true'], ['false'], [true], [false], [{}], [[]], [null] ]
+    const invalidCacheTimeoutValues = [['Hello world'], ['true'], ['false'], [true], [false], [{}], [[]], [null]]
     test.each(invalidCacheTimeoutValues)('should throw an error if cache time \'ct\' is not a number', (value) => {
       const executeFunction = () => config.configure({ ct: value })
 
       expect(executeFunction).toThrow('ct must be a number!')
     })
 
-    const outOfRangeCacheTimeoutValues = [ [59999], [86400001], [0], [99999999] ]
+    const outOfRangeCacheTimeoutValues = [[59999], [86400001], [0], [99999999]]
     test.each(outOfRangeCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of 60000 and 86400000', (value) => {
       const executeFunction = () => config.configure({ ct: value })
 
       expect(executeFunction).toThrow('ct must be between 60000 and 86400000!')
     })
 
-    const validCacheTimeoutValues = [ [60000], [86400000], [100000], [1234567] ]
+    const validCacheTimeoutValues = [[60000], [86400000], [100000], [1234567]]
     test.each(validCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of 60000 and 86400000', (value) => {
       const executeFunction = () => config.configure({ ct: value })
 
@@ -248,10 +286,10 @@ describe('Configuration', () => {
 
     test('set should set replace the internal _conf reference', () => {
       const p = config._conf
-    
+
       p.c = false
       config.configuration = p
-    
+
       expect(config._conf).toStrictEqual(p)
     })
   })

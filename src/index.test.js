@@ -17,8 +17,6 @@ describe('OpenEdge', () => {
       }
 
       oe.configure({
-        username: 'username',
-        password: 'password',
         host: 'localhost',
         port: 5000,
         tw: 2000,
