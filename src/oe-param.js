@@ -16,15 +16,11 @@ function build(parameters, configuration) {
   const parameterResult = []
 
   for (const [i, param] of parameters.entries()) {
-    let parameter
-
-    if (param === undefined) {
-      parameter = getOutputParameter(i + 1, configuration)
-    } else {
-      parameter = getInputParameter(i + 1, param, configuration)
-    }
-
-    parameterResult.push(parameter)
+    parameterResult.push(
+      param === undefined ?
+        getOutputParameter(i + 1, configuration) :
+        getInputParameter(i + 1, param, configuration)
+    )
   }
 
   return parameterResult
