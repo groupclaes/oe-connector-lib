@@ -149,7 +149,10 @@ module.exports = class Configuration {
     delete configuration.password
     delete configuration.app
 
+    return this.configureCredentials(configuration)
+  }
 
+  configureCredentials(configuration) {
     // If there are no creds in config use default if set
     if (!configuration.creds && ((this.configuration.username && this.configuration.password) || this.configuration.app)) {
       configuration.creds = {}
@@ -162,7 +165,6 @@ module.exports = class Configuration {
         configuration.creds.app = this.configuration.app
       }
     }
-
     return configuration
   }
 
