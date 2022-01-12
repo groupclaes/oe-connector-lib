@@ -1,4 +1,4 @@
-// Copyright 2021-2021 Jamie Vangeysel
+// Copyright 2021-2022 Jamie Vangeysel
 'use strict'
 
 const util = require('./util')
