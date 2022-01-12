@@ -17,7 +17,7 @@
 
 # Prerequisites
 In order to use this package you will need to have an instance of the [oe-connector](https://github.com/groupclaes/oe-connector) running. This library has been designed to work specifically and only with our in-house developed [oe-connector](https://github.com/groupclaes/oe-connector).  
-  
+
 The connector has been verified to work with OpenEdge version 11.6 and will propbably work with all next version we have not tested this on versions 12 and above.
 
 Please note that this library will require an http connection to the [oe-connector](https://github.com/groupclaes/oe-connector) and thus data between the server and the client will be unencrypted.
