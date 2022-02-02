@@ -68,6 +68,7 @@ function getInputParameter(index, param, configuration) {
  * @returns {string} return the type of the parameter
  */
 function resolveParameterType(param, configuration) {
+  if (param === null) return
   const paramType = typeof param
   switch (paramType) {
     case configuration.parameterDefaults.in:
