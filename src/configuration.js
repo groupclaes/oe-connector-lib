@@ -10,11 +10,11 @@ module.exports = class Configuration {
     password: util.getEnvVariable('OE_PASSWORD'),
     app: util.getEnvVariable('OE_APP'),
     host: util.getEnvVariable('OE_HOST', 'localhost'),
-    ssl: util.getEnvVariable('OE_SSL', false),
-    port: util.getEnvVariable('OE_PORT', 5000),
-    tw: util.getEnvVariable('OE_TIMEWINDOW', 60000),
-    c: util.getEnvVariable('OE_CACHE', false),
-    ct: util.getEnvVariable('OE_CAHCETIME', 3600000),
+    ssl: util.getEnvVariable('OE_SSL', false, 'boolean'),
+    port: util.getEnvVariable('OE_PORT', 5000, 'number'),
+    tw: util.getEnvVariable('OE_TIMEWINDOW', 60000, 'number'),
+    c: util.getEnvVariable('OE_CACHE', false, 'boolean'),
+    ct: util.getEnvVariable('OE_CAHCETIME', 3600000, 'number'),
     parameterDefaults: {
       in: util.getEnvVariable('OE_PARAMDEF_IN', 'string'),
       out: util.getEnvVariable('OE_PARAMDEF_OUT', 'json')

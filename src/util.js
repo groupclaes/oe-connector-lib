@@ -9,12 +9,18 @@ const validators = require('./validators')
  * @param {any} defaultValue which should be used if variable is not set
  * @returns 
  */
-function getEnvVariable(name, defaultValue) {
+function getEnvVariable(name, defaultValue, type) {
   if (validators.isUndefined(name))
     throw new Error('Name must be supplied!')
   if (!validators.isString(name))
     throw new Error('Name must be a string!')
 
+  switch (type) {
+    case 'boolean':
+      return process.env[name] === 'true' || defaultValue
+    case 'number':
+      return parseInt(process.env[name], 10) || defaultValue
+  }
   return process.env[name] || defaultValue
 }
 
