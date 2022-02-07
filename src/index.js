@@ -21,15 +21,15 @@ function run(name, parameters, options) {
 
   // wrap http request in promise chain
   return new Promise((resolve, reject) => {
-    const data = JSON.stringify(request)
+    const buff = Buffer.from(JSON.stringify(request), 'utf8')
 
-    let req = buildWebRequest(data.length, resolve)
+    let req = buildWebRequest(resolve)
 
     req.on('error', error => {
       reject(error)
     })
 
-    req.write(data)
+    req.write(buff)
     req.end()
   })
 }
@@ -66,21 +66,20 @@ function validateParametersParam(parameters) {
  * @param {number} dataLength: length of the data to post 
  * @returns {any} options object fot http(s) request
  */
-function buildWebRequestOptions(dataLength) {
+function buildWebRequestOptions() {
   return {
     hostname: config.configuration.host,
     port: config.configuration.port,
     path: '/api/openedge',
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': dataLength
+      'Content-Type': 'application/json; charset=utf-8'
     }
   }
 }
 
-function buildWebRequest(dataLength, resolve) {
-  const requestOptions = buildWebRequestOptions(dataLength)
+function buildWebRequest(resolve) {
+  const requestOptions = buildWebRequestOptions()
 
   // use http or https depending on configuration
   const webhost = config.configuration.ssl === true ? require('https') : require('http')
