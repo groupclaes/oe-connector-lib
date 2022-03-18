@@ -1,4 +1,11 @@
 *.json
 *.e2e.js
 *.test.js
+.github
+coverage
 node_modules
+.travis.yml
+.codeclimate.yml
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+LICENSE

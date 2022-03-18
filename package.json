@@ -24,7 +24,7 @@
     "email": "jamie.vangeysel@groupclaes.be",
     "url": "https://jamievangeysel.be"
   },
-  "license": "GNU LESSER GENERAL PUBLIC LICENSE v2.1 SEE LICENSE",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/groupclaes/oe-connector-lib/issues"
   },
