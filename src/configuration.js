@@ -140,30 +140,31 @@ module.exports = class Configuration {
    * @return {any} configuration object to supply with payload 
    */
   build(options) {
-    const configuration = {
+    let configuration = {
       ...this.configuration,
       ...options
+    }
+
+    if (!configuration.creds && ((this.configuration.username && this.configuration.password) || this.configuration.app)) {
+      configuration = this.configureCredentials(configuration)
     }
 
     delete configuration.username
     delete configuration.password
     delete configuration.app
 
-    if (!configuration.creds && ((this.configuration.username && this.configuration.password) || this.configuration.app)) {
-      return this.configureCredentials(configuration)
-    }
     return configuration
   }
 
   configureCredentials(configuration) {
     configuration.creds = {}
 
-    if (this.configuration.username && this.configuration.password) {
-      configuration.creds.user = this.configuration.username
-      configuration.creds.pwd = this.configuration.password
+    if (configuration.username && configuration.password) {
+      configuration.creds.user = configuration.username
+      configuration.creds.pwd = configuration.password
     }
-    if (this.configuration.app) {
-      configuration.creds.app = this.configuration.app
+    if (configuration.app) {
+      configuration.creds.app = configuration.app
     }
     return configuration
   }

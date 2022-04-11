@@ -16,14 +16,15 @@ const config = new Configuration()
  */
 function run(name, parameters, options) {
   validateRunParam(name, parameters)
+  const configuration = config.build(options)
 
-  const request = buildRequest(name, parameters, options)
+  const request = buildRequest(name, parameters, configuration)
 
   // wrap http request in promise chain
   return new Promise((resolve, reject) => {
     const buff = Buffer.from(JSON.stringify(request), 'utf8')
 
-    let req = buildWebRequest(resolve)
+    let req = buildWebRequest(resolve, configuration)
 
     req.on('error', error => {
       reject(error)
@@ -66,10 +67,10 @@ function validateParametersParam(parameters) {
  * @param {number} dataLength: length of the data to post 
  * @returns {any} options object fot http(s) request
  */
-function buildWebRequestOptions() {
+function buildWebRequestOptions(configuration) {
   return {
-    hostname: config.configuration.host,
-    port: config.configuration.port,
+    hostname: configuration.host,
+    port: configuration.port,
     path: '/api/openedge',
     method: 'POST',
     headers: {
@@ -78,11 +79,11 @@ function buildWebRequestOptions() {
   }
 }
 
-function buildWebRequest(resolve) {
-  const requestOptions = buildWebRequestOptions()
+function buildWebRequest(resolve, configuration) {
+  const requestOptions = buildWebRequestOptions(configuration)
 
   // use http or https depending on configuration
-  const webhost = config.configuration.ssl === true ? require('https') : require('http')
+  const webhost = configuration.ssl === true ? require('https') : require('http')
 
   return webhost.request(requestOptions, (res) => {
     let body
@@ -105,17 +106,21 @@ function buildWebRequest(resolve) {
  * @private buildRequest
  * @param {string} name
  * @param {any[]} parameters
- * @param {any} options
+ * @param {any} configuration
  * @returns {any} payload to post to oe-connector
  */
-function buildRequest(name, parameters, options) {
-  const configuration = config.build(options)
-
+function buildRequest(name, parameters, configuration) {
   const payload = {
     proc: name.indexOf('.') > -1 ? name : `${name}.p`,
-    parm: [],
-    tw: configuration.tw,
-    cache: configuration.c === true ? configuration.ct : -1,
+    parm: []
+  }
+  configuration = config.build(configuration)
+
+  if (configuration.tw) {
+    payload.tw = configuration.tw
+  }
+  if (configuration.c === true) {
+    payload.cache = configuration.c === true ? configuration.ct : -1
   }
 
   const buildParam = param.build(parameters, configuration)
@@ -131,7 +136,7 @@ function buildRequest(name, parameters, options) {
 }
 
 function configure(options) {
-  config.configure(options)
+  return config.configure(options)
 }
 
 module.exports = {

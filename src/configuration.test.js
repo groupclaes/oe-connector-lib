@@ -198,11 +198,11 @@ describe('Configuration', () => {
       expect(executeFunction).toThrow('tw must be a number!')
     })
 
-    const invalidTimeWindowValues = [[-1], [0], [1], [10], [99], [300001], [23432423]]
+    const invalidTimeWindowValues = [[-10], [300001], [23432423]]
     test.each(invalidTimeWindowValues)('should throw an error when the time window is not within the valid range', (tw) => {
       const executeFunction = () => config.configure({ tw })
 
-      expect(executeFunction).toThrow('tw must be between 100 and 300000!')
+      expect(executeFunction).toThrow('tw must be between -1 and 300000!')
     })
     const validTimeWindowValues = [[100], [12345], [123456], [300000]]
     test.each(validTimeWindowValues)('should throw an error when the time window is not within the valid range', (tw) => {
@@ -232,15 +232,15 @@ describe('Configuration', () => {
       expect(executeFunction).toThrow('ct must be a number!')
     })
 
-    const outOfRangeCacheTimeoutValues = [[59999], [86400001], [0], [99999999]]
-    test.each(outOfRangeCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of 60000 and 86400000', (value) => {
+    const outOfRangeCacheTimeoutValues = [[86400001], [-2], [99999999]]
+    test.each(outOfRangeCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of -1 and 86400000', (value) => {
       const executeFunction = () => config.configure({ ct: value })
 
-      expect(executeFunction).toThrow('ct must be between 60000 and 86400000!')
+      expect(executeFunction).toThrow('ct must be between -1 and 86400000!')
     })
 
-    const validCacheTimeoutValues = [[60000], [86400000], [100000], [1234567]]
-    test.each(validCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of 60000 and 86400000', (value) => {
+    const validCacheTimeoutValues = [[-1], [60000], [86400000], [100000], [1234567]]
+    test.each(validCacheTimeoutValues)('should not throw if cache time \'ct\' is a number within the range of -1 and 86400000', (value) => {
       const executeFunction = () => config.configure({ ct: value })
 
       expect(executeFunction).not.toThrow()
