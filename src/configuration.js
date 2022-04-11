@@ -5,24 +5,24 @@ const util = require('./util')
 const Validators = require('./validators')
 
 module.exports = class Configuration {
-  _conf = {
-    username: util.getEnvVariable('OE_USERNAME'),
-    password: util.getEnvVariable('OE_PASSWORD'),
-    app: util.getEnvVariable('OE_APP'),
-    host: util.getEnvVariable('OE_HOST', 'localhost'),
-    ssl: util.getEnvVariable('OE_SSL', false, 'boolean'),
-    port: util.getEnvVariable('OE_PORT', 5000, 'number'),
-    tw: util.getEnvVariable('OE_TIMEWINDOW', 60000, 'number'),
-    c: util.getEnvVariable('OE_CACHE', false, 'boolean'),
-    ct: util.getEnvVariable('OE_CAHCETIME', 3600000, 'number'),
-    parameterDefaults: {
-      in: util.getEnvVariable('OE_PARAMDEF_IN', 'string'),
-      out: util.getEnvVariable('OE_PARAMDEF_OUT', 'json')
-    }
-  }
+  _conf
 
   constructor() {
-
+    this._conf = {
+      username: util.getEnvVariable('OE_USERNAME'),
+      password: util.getEnvVariable('OE_PASSWORD'),
+      app: util.getEnvVariable('OE_APP'),
+      host: util.getEnvVariable('OE_HOST', 'localhost'),
+      ssl: util.getEnvVariable('OE_SSL', false, 'boolean'),
+      port: util.getEnvVariable('OE_PORT', 5000, 'number'),
+      tw: util.getEnvVariable('OE_TIMEWINDOW', 60000, 'number'),
+      c: util.getEnvVariable('OE_CACHE', false, 'boolean'),
+      ct: util.getEnvVariable('OE_CAHCETIME', 3600000, 'number'),
+      parameterDefaults: {
+        in: util.getEnvVariable('OE_PARAMDEF_IN', 'string'),
+        out: util.getEnvVariable('OE_PARAMDEF_OUT', 'json')
+      }
+    }
   }
 
   /**
@@ -109,7 +109,7 @@ module.exports = class Configuration {
    */
   configureTimeWindow(timeWindow) {
     if (!Validators.isUndefined(timeWindow)) {
-      this.configureNumberIfBetween(timeWindow, 'tw', 100, 300000)
+      this.configureNumberIfBetween(timeWindow, 'tw', -1, 300000)
     }
   }
 
@@ -129,7 +129,7 @@ module.exports = class Configuration {
    */
   configureCacheTime(cacheTime) {
     if (!Validators.isUndefined(cacheTime)) {
-      this.configureNumberIfBetween(cacheTime, 'ct', 60000, 86400000)
+      this.configureNumberIfBetween(cacheTime, 'ct', -1, 86400000)
     }
   }
 
