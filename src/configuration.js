@@ -142,7 +142,13 @@ module.exports = class Configuration {
   build(options) {
     let configuration = {
       ...this.configuration,
-      ...options
+      ...options,
+    }
+    if (options && options.parameterDefaults) {
+      configuration.parameterDefaults = {
+        ...this.configuration.parameterDefaults,
+        ...options.parameterDefaults
+      }
     }
 
     if (!configuration.creds && ((this.configuration.username && this.configuration.password) || this.configuration.app)) {

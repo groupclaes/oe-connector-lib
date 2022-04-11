@@ -77,6 +77,7 @@ function getInputParameter(index, param, configuration) {
 function resolveParameterType(param, configuration) {
   if (param === null) return
   const paramType = typeof param
+  console.log(param, paramType, configuration)
   switch (paramType) {
     case configuration.parameterDefaults.in:
       return

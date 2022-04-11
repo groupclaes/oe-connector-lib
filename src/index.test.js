@@ -42,7 +42,7 @@ describe('OpenEdge', () => {
         parm: [
           { pos: 1, value: "testProcedure" },
           { pos: 2, type: "boolean", value: true },
-          { pos: 3, out: true }
+          { pos: 3, type: 'string', out: true }
         ],
         creds: {
           user: 'username',
@@ -69,7 +69,11 @@ describe('OpenEdge', () => {
         "testProcedure", // string parameter
         true, // boolean parameter
         undefined // undefined (output parameter)
-      ]);
+      ], {
+        parameterDefaults: {
+          out: 'string'
+        }
+      });
 
 
       // Assert
