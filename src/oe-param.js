@@ -33,10 +33,17 @@ function build(parameters, configuration) {
  * @returns output parameter object
  */
 function getOutputParameter(index, configuration) {
-  return {
-    pos: index,
-    out: true
-  }
+  if (configuration.parameterDefaults.out === 'json')
+    return {
+      pos: index,
+      out: true
+    }
+  else
+    return {
+      pos: index,
+      type: configuration.parameterDefaults.out,
+      out: true
+    }
 }
 
 /**
