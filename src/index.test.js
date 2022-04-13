@@ -133,6 +133,35 @@ describe('OpenEdge', () => {
 
       expect(result.proc).toStrictEqual(expectedResult)
     })
+
+    test('should handle parameters in advanced manner', () => {
+      const expectedResult = [
+        { pos: 1, value: 1, type: 'integer', redact: true }
+      ]
+      const parameters = [
+        { value: 1, redact: true }
+      ]
+
+
+      const configuration = {
+        c: true,
+        ct: 60000,
+        tw: 5000,
+        creds: {
+          user: 'oe-server',
+          password: 'password'
+        },
+        parameterDefaults: {
+          in: 'string',
+          out: 'json'
+        },
+        simpleParameters: false
+      }
+
+      const result = oe.test('testProcedure', parameters, configuration)
+
+      expect(result.parm).toStrictEqual(expectedResult)
+    })
   })
   describe('run()', () => {
     test('Should throw when no procedure name is supplied', () => {

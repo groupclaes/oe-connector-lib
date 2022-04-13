@@ -123,7 +123,13 @@ function buildRequest(name, parameters, configuration) {
     payload.cache = configuration.c === true ? configuration.ct : -1
   }
 
-  const buildParam = param.build(parameters, configuration)
+  let buildParam
+  if (configuration.simpleParameters === false) {
+    buildParam = param.buildAdvanced(parameters, configuration)
+  } else {
+    buildParam = param.build(parameters, configuration)
+  }
+
   if (buildParam) {
     payload.parm = buildParam
   }
