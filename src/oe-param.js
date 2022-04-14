@@ -39,18 +39,27 @@ function buildAdvanced(parameters, configuration) {
   const parameterResult = []
 
   for (const [i, param] of parameters.entries()) {
-    if (param?.out) {
-      parameterResult.push(getAdvancedOutputParameter(i + 1, param, configuration))
-    } else {
-      parameterResult.push(
-        param.value === undefined ?
-          getAdvancedOutputParameter(i + 1, param, configuration) :
-          getAdvancedInputParameter(i + 1, param, configuration)
-      )
-    }
+    parameterResult.push(getAdvancedParameter(i + 1, param, configuration))
   }
 
   return parameterResult
+}
+
+/**
+ * Retrieve either advanced parameter result
+ * @param {Number} index 
+ * @param {Object} parameter 
+ * @param {Object} configuration 
+ * @returns a parameter object in OE-connector format
+ */
+function getAdvancedParameter(index, parameter, configuration) {
+  if (parameter?.out) {
+    return getAdvancedOutputParameter(index, parameter, configuration)
+  } else {
+    return parameter.value === undefined ?
+        getAdvancedOutputParameter(index, parameter, configuration) :
+        getAdvancedInputParameter(index, parameter, configuration)
+  }
 }
 
 /**
@@ -182,11 +191,7 @@ function resolveParameterType(param, configuration) {
       return 'integer'
 
     case 'object':
-      if (isOutParameter && configuration.parameterDefaults.out === 'json') {
-        return 'def'
-      } else {
-        return 'json'
-      }
+      return getOutputObjectParameterType(configuration, isOutParameter)
   }
   return paramType
 }
@@ -199,6 +204,20 @@ function handleParameterFinalType(parameter) {
   if (!parameter.type || parameter.type === 'def') {
     delete parameter.type
   }
+}
+
+/**
+ * Retrieve the output parameter type if the parameter type is an object
+ * @param {*} configuration 
+ * @param {*} isOutParameter 
+ * @returns either 'json' or 'def' if json is the default configured output type
+ */
+function getOutputObjectParameterType(configuration, isOutParameter) {
+  if (isOutParameter && configuration.parameterDefaults.out === 'json') {
+    return 'def'
+  }
+
+  return 'json'
 }
 
 module.exports = {
