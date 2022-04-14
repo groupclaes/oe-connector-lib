@@ -122,3 +122,8 @@ data.json
 
 # Feggin macs
 .DS_Store
+
+# Sonarqube
+.scannerwork
+test-report.xml
+scan.sh
