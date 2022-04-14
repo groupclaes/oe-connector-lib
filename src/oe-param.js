@@ -39,7 +39,7 @@ function buildAdvanced(parameters, configuration) {
   const parameterResult = []
 
   for (const [i, param] of parameters.entries()) {
-    if (!param) {
+    if (param?.out) {
       parameterResult.push(getAdvancedOutputParameter(i + 1, param, configuration))
     } else {
       parameterResult.push(
@@ -178,12 +178,6 @@ function resolveParameterType(param, configuration) {
         return 'def'
 
       break
-    case configuration.parameterDefaults.out:
-      if (isOutParameter)
-        return 'def'
-
-      break
-
     case 'number':
       return 'integer'
 

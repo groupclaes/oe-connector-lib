@@ -38,6 +38,84 @@ describe('oe-param', () => {
     })
   })
 
+  describe('buildAdvanced()', () => {
+    const configuration = {
+      parameterDefaults: {
+        in: 'string',
+        out: 'json'
+      }
+    }
+    test('should throw error if parameters not array', () => {
+      expect(() => param.buildAdvanced(null, {})).toThrow('parameters must be an array!')
+    })
+
+    const truthyTests = [ [true], ['true'], [{}], [[]] ]
+    test.each(truthyTests)('should set parameter to out if out is truthy', (out) => {
+      const expectedResult = [
+        {
+          pos: 1,
+          out: true
+        }
+      ]
+
+      const result = param.buildAdvanced([ { out, value: 1 } ], configuration)
+
+      expect(result).toStrictEqual(expectedResult)
+    })
+
+    const falsyTests = [ [false], [null], [undefined] ]
+    test.each(falsyTests)('should set parameter as input if out falsy and value specified', (out) => {
+      const expectedResult = [
+        {
+          pos: 1,
+          value: 1,
+          type: 'integer'
+        }
+      ]
+
+      const result = param.buildAdvanced([ { out, value: 1 } ], configuration)
+
+      expect(result).toStrictEqual(expectedResult)
+    })
+
+    test.each(falsyTests)('should set parameter as output if out is falsy and no value specified', (out) => {
+      const expectedResult = [
+        {
+          pos: 1,
+          out: true
+        }
+      ]
+
+      const result = param.buildAdvanced([ { out } ], configuration)
+
+      expect(result).toStrictEqual(expectedResult)
+    })
+
+
+
+    test('should handle multiple parameters, in and outs', () => {
+      const expectedResult = [
+        {
+          pos: 1,
+          value: 'test'
+        },
+        {
+          pos: 2,
+          value: true,
+          type: 'boolean'
+        },
+        {
+          pos: 3,
+          out: true
+        }
+      ]
+
+      const result = param.buildAdvanced([ { value: 'test' }, { value: true }, { } ], configuration)
+
+      expect(result).toStrictEqual(expectedResult)
+    })
+  })
+
   describe('getInputParameter', () => {
     const configuration = { parameterDefaults: { in: 'json' }}
     test('should return correct input parameter object', () => {
@@ -85,15 +163,18 @@ describe('oe-param', () => {
 
 
     const advancedInputTypeTests = [
-      ['object', 'json'],
-      ['json', 'json'],
-      ['string', undefined],
-      [undefined, 'integer'],
-      [null, 'integer'],
-      [false, undefined]
+      ['object', {},  'json'],
+      ['json', {},  'json'],
+      ['string', 'test',  undefined],
+      [undefined, 1, 'integer'],
+      [null, 1, 'integer'],
+      [false, 1, undefined],
+
+      // Test for default parameter (string) from config
+      [undefined, 'test', undefined]
     ]
-    test.each(advancedInputTypeTests)('should set correct input type', (type, expectedType) => {
-      const parameter = param.getAdvancedInputParameter(13, { value: 1, type }, configuration)
+    test.each(advancedInputTypeTests)('should set correct input type', (type, value, expectedType) => {
+      const parameter = param.getAdvancedInputParameter(13, { value, type }, configuration)
 
       expect(parameter.type).toStrictEqual(expectedType)
     })
@@ -115,7 +196,7 @@ describe('oe-param', () => {
   describe('getAdvancedOutputParameter', () => {
     const configuration = {
       parameterDefaults: {
-        in: 'json',
+        in: 'string',
         out: 'json'
       }
     }
