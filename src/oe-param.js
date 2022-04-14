@@ -88,9 +88,9 @@ function getOutputParameter(index, configuration) {
   if (options.type != null && options.type !== configuration.parameterDefaults.out) {
     parameter.type = resolveParameterTypeString(options.type, configuration, true)
 
-    if (!parameter.type) {
-      delete parameter.type
-    }
+    handleParameterFinalType(parameter)
+  } else {
+    delete parameter.type
   }
 
   if (options.ar) {
@@ -115,12 +115,10 @@ function getInputParameter(index, param, configuration) {
   const parameter = {
     pos: index,
     value: param,
-    type: resolveParameterType(param, configuration),
+    type: resolveParameterType(param, configuration)
   }
 
-  if (!parameter.type) {
-    delete parameter.type
-  }
+  handleParameterFinalType(parameter)
 
   return parameter
 }
@@ -139,12 +137,10 @@ function getAdvancedInputParameter(index, param, configuration) {
       resolveParameterType(param.value, configuration)
   }
 
-  if (!parameter.type) {
-    delete parameter.type
-  }
+  handleParameterFinalType(parameter)
 
   if (param.redact) {
-    parameter.redact = param.redact && true
+    parameter.redact = !!param.redact
   }
 
   if (param.label) {
@@ -179,13 +175,12 @@ function resolveParameterType(param, configuration) {
   switch (paramType) {
     case configuration.parameterDefaults.in:
       if (!isOutParameter)
-        return false
-        
-      break
+        return 'def'
 
+      break
     case configuration.parameterDefaults.out:
       if (isOutParameter)
-        return false
+        return 'def'
 
       break
 
@@ -193,8 +188,8 @@ function resolveParameterType(param, configuration) {
       return 'integer'
 
     case 'object':
-      if (isOutParameter) {
-        return
+      if (isOutParameter && configuration.parameterDefaults.out === 'json') {
+        return 'def'
       } else {
         return 'json'
       }
@@ -202,12 +197,24 @@ function resolveParameterType(param, configuration) {
   return paramType
 }
 
+/**
+ * Unset/delete the parameter type property if it is null, false or def (default)
+ * @param {*} parameter 
+ */
+function handleParameterFinalType(parameter) {
+  if (!parameter.type || parameter.type === 'def') {
+    delete parameter.type
+  }
+}
+
 module.exports = {
   build,
-  buildAdvanced,
-  getInputParameter,
-  getAdvancedInputParameter,
-  getOutputParameter,
-  getAdvancedOutputParameter,
-  resolveParameterType
+  buildAdvanced
+}
+
+if (process.env.NODE_ENV === 'test') {
+  module.exports.getInputParameter = getInputParameter
+  module.exports.getAdvancedInputParameter = getAdvancedInputParameter
+  module.exports.getOutputParameter = getOutputParameter
+  module.exports.getAdvancedOutputParameter = getAdvancedOutputParameter
 }

@@ -50,6 +50,16 @@ describe('oe-param', () => {
 
       expect(result).toStrictEqual(expectedResult)
     })
+
+    test('should not set parameter type if parameter is NULL', () => {
+      const expectedResult = {
+        pos: 1, value: null
+      }
+
+      const result = param.getInputParameter(1, null, configuration)
+
+      expect(result).toStrictEqual(expectedResult)
+    })
   })
 
   describe('getAdvancedInputParameter', () => {
