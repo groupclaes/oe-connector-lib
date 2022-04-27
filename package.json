@@ -4,7 +4,8 @@
   "description": "Run OpenEdge ABL Procedures, requires github.com/groupclaes/oe-connector",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test-sonar": "CI=true jest --coverage --testResultsProcessor=jest-sonar-reporter"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,8 @@
   "homepage": "https://github.com/groupclaes/oe-connector-lib#readme",
   "devDependencies": {
     "jest": "^27.3.1",
-    "jest-cli": "^27.4.5"
+    "jest-cli": "^27.4.5",
+    "jest-sonar-reporter": "^2.0.0"
   },
   "jest": {
     "collectCoverage": true,
