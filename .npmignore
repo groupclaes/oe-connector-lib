@@ -9,3 +9,8 @@ node_modules
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 LICENSE
+
+# Sonarqube
+.scannerwork
+test-report.xml
+scan.sh
