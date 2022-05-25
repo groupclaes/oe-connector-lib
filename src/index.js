@@ -4,6 +4,10 @@
 const validators = require('./validators')
 const param = require('./oe-param')
 const Configuration = require('./configuration')
+const {
+  ProcedureNameInvalidError,
+  ProcedureParametersInvalidError
+} = require('./errors')
 
 const config = new Configuration()
 
@@ -42,24 +46,24 @@ function validateRunParam(name, parameters) {
 
 function validateNameParam(name) {
   if (validators.isUndefined(name))
-    throw new Error('No name supplied!')
+    throw new ProcedureNameInvalidError('isUndefined')
   if (validators.isNull(name))
-    throw new Error('name must not be null!')
+    throw new ProcedureNameInvalidError('isNull')
   if (!validators.isString(name))
-    throw new Error('name must be a string!')
+    throw new ProcedureNameInvalidError('isNotString')
   if (!name.match(/^(([\w- ]{1,223}\/)*)([\w-. ]{1,32})$/))
-    throw new Error('Name is invalid, should only contain letters, numbers or special characters: -._ or a space (path is optional)!')
+    throw new ProcedureNameInvalidError('isNotMatch')
 }
 
 function validateParametersParam(parameters) {
   if (validators.isUndefined(parameters))
-    throw new Error('No parameters supplied!')
+    throw new ProcedureParametersInvalidError('isUndefined')
   if (validators.isNull(parameters))
-    throw new Error('parameters must not be null!')
+    throw new ProcedureParametersInvalidError('isNull')
   if (!validators.isObject(parameters))
-    throw new Error('parameters must be an object (Array)!')
+    throw new ProcedureParametersInvalidError('isNotObject')
   if (!validators.isArray(parameters))
-    throw new Error('parameters must be an array!')
+    throw new ProcedureParametersInvalidError('isNotArray')
 }
 
 /**

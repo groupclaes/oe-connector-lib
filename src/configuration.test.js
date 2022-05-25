@@ -33,7 +33,6 @@ describe('Configuration', () => {
       expect(() => config.configure({})).toThrow('Options object must contain at least one property!')
     })
 
-
     const invalidNames = [[1234], [{}], [true], [false], [null]]
     test.each(invalidNames)('should throw an error when username is not a string', (name) => {
       const executeFunction = () =>
