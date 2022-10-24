@@ -14,13 +14,13 @@ class ProcedureParametersInvalidError extends Error {
 }
 
 const ProcedureNameInvalidErrorMessage = {
-  'isUndefined': 'ProcedureName is undefined',
+  'isUndefined': 'ProcedureName is undefined!',
   'isNull': 'ProcedureName is null!',
   'isNotString': 'ProcedureName should be a string!',
   'isNotMatch': 'ProcedureName did not match valid pettern: only letters, numbers, special characters: /-._ or a space are allowed!',
 }
 
-const ProcedureParametersInvalidError = {
+const ProcedureParametersInvalidErrorMessage = {
   'isUndefined': 'ProcedureParameters is undefined',
   'isNull': 'ProcedureParameters is null!',
   'isNotObject': 'ProcedureParameters should be an object (Type: Array)!',

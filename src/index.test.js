@@ -165,15 +165,15 @@ describe('OpenEdge', () => {
   })
   describe('run()', () => {
     test('Should throw when no procedure name is supplied', () => {
-      expect(() => oe.run()).toThrow('No name supplied!')
+      expect(() => oe.run()).toThrow('ProcedureName is undefined!')
     })
 
     test('Should throw when procedure name is NULL', () => {
-      expect(() => oe.run(null)).toThrow('name must not be null!')
+      expect(() => oe.run(null)).toThrow('ProcedureName is null!')
     })
 
     test('Should throw when procedure name is not a string', () => {
-      expect(() => oe.run(5893475)).toThrow('name must be a string!')
+      expect(() => oe.run(5893475)).toThrow('ProcedureName should be a string!')
     })
 
     const invalidNames = [[''], ['CheckVat?.p'], ['CheckV!at.p'], ['Some@Procedure.p']]
@@ -184,12 +184,12 @@ describe('OpenEdge', () => {
         tw: 500
       })
 
-      expect(() => oe.run(value)).toThrow('Name is invalid, should only contain letters, numbers or special characters: -._ or a space (path is optional)!')
+      expect(() => oe.run(value)).toThrow('ProcedureName did not match valid pettern: only letters, numbers, special characters: /-._ or a space are allowed!')
     })
 
     const invalidArguments = [
-      ['parameters must be an array!', 'CheckVat-.p', {}],
-      ['parameters must be an object (Array)!', 'Check Vat.p', 12]
+      ['ProcedureParameters must be an Array!', 'CheckVat-.p', {}],
+      ['ProcedureParameters should be an object (Type: Array)!', 'Check Vat.p', 12]
     ]
     test.each(invalidArguments)('Should throw when incorrect arguments are supplied', (expectedError, name, argumentList) => {
       oe.configure({
@@ -208,7 +208,7 @@ describe('OpenEdge', () => {
         tw: 500
       })
 
-      expect(() => oe.run('CheckVat')).toThrow('No parameters supplied!')
+      expect(() => oe.run('CheckVat')).toThrow('ProcedureParameters is undefined')
     })
 
     test('Should throw when arguments are NULL', () => {
@@ -218,7 +218,7 @@ describe('OpenEdge', () => {
         tw: 500
       })
 
-      expect(() => oe.run('CheckVat', null)).toThrow('parameters must not be null!')
+      expect(() => oe.run('CheckVat', null)).toThrow('ProcedureParameters is null!')
     })
     test('Should reject when no connection to host', async () => {
       expect.assertions(1)
