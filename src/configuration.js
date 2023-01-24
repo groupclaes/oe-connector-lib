@@ -18,6 +18,7 @@ module.exports = class Configuration {
       tw: util.getEnvVariable('OE_TIMEWINDOW', 60000, 'number'),
       c: util.getEnvVariable('OE_CACHE', false, 'boolean'),
       ct: util.getEnvVariable('OE_CAHCETIME', 3600000, 'number'),
+      simpleParameters: util.getEnvVariable('OE_SIMPLEPARAM', false, 'boolean'),
       parameterDefaults: {
         in: util.getEnvVariable('OE_PARAMDEF_IN', 'string'),
         out: util.getEnvVariable('OE_PARAMDEF_OUT', 'json')
@@ -42,6 +43,7 @@ module.exports = class Configuration {
     this.configureTimeWindow(options.tw)
     this.configureCacheEnabled(options.c)
     this.configureCacheTime(options.ct)
+    this.configureSimpleParameters(options.simpleParameters)
   }
 
   /**
@@ -130,6 +132,16 @@ module.exports = class Configuration {
   configureCacheTime(cacheTime) {
     if (!Validators.isUndefined(cacheTime)) {
       this.configureNumberIfBetween(cacheTime, 'ct', -1, 86400000)
+    }
+  }
+
+  /**
+   * Configure simpleParameters
+   * @param {boolean | undefined} simpleParameters
+   */
+  configureSimpleParameters(simpleParameters) {
+    if (!Validators.isUndefined(simpleParameters)) {
+      this.configureBoolean(simpleParameters, 'simpleParameters')
     }
   }
 
