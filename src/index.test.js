@@ -21,7 +21,8 @@ describe('OpenEdge', () => {
         port: 5000,
         tw: 2000,
         c: true,
-        ct: 60000
+        ct: 60000,
+        simpleParameters: true
       })
 
       // Act
@@ -61,7 +62,8 @@ describe('OpenEdge', () => {
         port: 5000,
         tw: 2000,
         c: true,
-        ct: 60000
+        ct: 60000,
+        simpleParameters: true
       })
 
       // Act
@@ -103,7 +105,6 @@ describe('OpenEdge', () => {
         tw: 500
       })
 
-
       const result = oe.test('testProcedure', [
         "Stringparameter", // string parameter
         50, // number parameter
@@ -113,6 +114,7 @@ describe('OpenEdge', () => {
         c: true,
         ct: 60000,
         tw: 5000,
+        simpleParameters: true,
         creds: {
           user: 'oe-server',
           password: 'password'
