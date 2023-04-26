@@ -1,4 +1,4 @@
-export declare class OE {
+declare class OE {
   configuration: IConfiguration
 
   run(name: string, parameters: any[], options: IConfiguration): Promise<any>
@@ -10,15 +10,15 @@ declare interface IConfiguration {
   username?: string
   password?: string
   app?: string
-  host?: string = 'localhost'
-  ssl?: boolean = false
-  port?: number = 5000
-  tw?: number = 60000
-  c?: boolean = false
-  ct?: number = 3600000
-  simpleParameters?: boolean = false
+  host?: string
+  ssl?: boolean
+  port?: number
+  tw?: number
+  c?: boolean
+  ct?: number
+  simpleParameters?: boolean
 }
 
 /** singleton Oe instance */
-export declare const oe: OE;
-export { };
+declare const oe: OE
+export = oe
