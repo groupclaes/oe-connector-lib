@@ -17,6 +17,10 @@ declare interface IConfiguration {
   c?: boolean
   ct?: number
   simpleParameters?: boolean
+  parameterDefaults?: {
+    out: string,
+    in: string
+  }
 }
 
 /** singleton Oe instance */
