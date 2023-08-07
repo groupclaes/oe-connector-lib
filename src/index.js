@@ -120,27 +120,18 @@ function buildRequest(name, parameters, configuration) {
   }
   configuration = config.build(configuration)
 
-  if (configuration.tw) {
+  if (configuration.tw)
     payload.tw = configuration.tw
-  }
-  if (configuration.c === true) {
+  if (configuration.c === true)
     payload.cache = configuration.c === true ? configuration.ct : -1
-  }
+  
+  const requestParam = getParameters(parameters, configuration)
 
-  let buildParam
-  if (configuration.simpleParameters === false) {
-    buildParam = param.buildAdvanced(parameters, configuration)
-  } else {
-    buildParam = param.build(parameters, configuration)
-  }
+  if (requestParam)
+    payload.parm = requestParam
 
-  if (buildParam) {
-    payload.parm = buildParam
-  }
-
-  if (configuration.creds) {
+  if (configuration.creds)
     payload.creds = configuration.creds
-  }
 
   return payload
 }
@@ -155,6 +146,23 @@ function getProcedureName(name) {
   if (name.indexOf('.') > -1)
     return name
   return name + '.p'
+}
+
+/**
+ * Returns build parameters array from input
+ * @private
+ * @param {any[]} parameters to compile 
+ * @returns {any[]} build parameters array
+ */
+function getParameters(parameters, configuration) {
+  let buildParam
+
+  if (configuration.simpleParameters === false)
+    buildParam = param.buildAdvanced(parameters, configuration)
+  else
+    buildParam = param.build(parameters, configuration)
+
+  return buildParam
 }
 
 function configure(options) {
