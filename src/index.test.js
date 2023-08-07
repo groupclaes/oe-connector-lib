@@ -287,4 +287,18 @@ describe('OpenEdge', () => {
       expect(await oe.run('test.p', [])).toEqual(0x43)
     })
   })
+
+  // describe('getProcedureName(name: string)', () => {
+  //   const testPrefixCases = [
+  //     ['test', 'test.p'],
+  //     ['test.', 'test.'],
+  //     ['test.p', 'test.p'],
+  //     ['test.r', 'test.r']
+  //   ]
+  //   test.each(testPrefixCases)('Should add \'.p\' to the procedure name if no extention or dot is present', (input, expectedResult) => {
+  //     const result = oe.getProcedureName(input, [])
+
+  //     expect(result.proc).toStrictEqual(expectedResult)
+  //   })
+  // })
 })

@@ -124,7 +124,7 @@ function buildRequest(name, parameters, configuration) {
     payload.tw = configuration.tw
   if (configuration.c === true)
     payload.cache = configuration.c === true ? configuration.ct : -1
-  
+
   const requestParam = getParameters(parameters, configuration)
 
   if (requestParam)
@@ -139,7 +139,7 @@ function buildRequest(name, parameters, configuration) {
 /**
  * Returns name of procedure to run, append missing .p if applicable
  * @private
- * @param {string} name 
+ * @param {string} name
  * @returns {string} procedure filename
  */
 function getProcedureName(name) {
