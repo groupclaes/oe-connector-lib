@@ -115,7 +115,7 @@ function buildWebRequest(resolve, configuration) {
  */
 function buildRequest(name, parameters, configuration) {
   const payload = {
-    proc: name.indexOf('.') > -1 ? name : `${name}.p`,
+    proc: getProcedureName(name),
     parm: []
   }
   configuration = config.build(configuration)
@@ -143,6 +143,18 @@ function buildRequest(name, parameters, configuration) {
   }
 
   return payload
+}
+
+/**
+ * Returns name of procedure to run, append missing .p if applicable
+ * @private
+ * @param {string} name 
+ * @returns {string} procedure filename
+ */
+function getProcedureName(name) {
+  if (name.indexOf('.') > -1)
+    return name
+  return name + '.p'
 }
 
 function configure(options) {
