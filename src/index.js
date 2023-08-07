@@ -122,13 +122,11 @@ function buildRequest(name, parameters, configuration) {
 
   if (configuration.tw)
     payload.tw = configuration.tw
+  
   if (configuration.c === true)
     payload.cache = configuration.c === true ? configuration.ct : -1
 
-  const requestParam = getParameters(parameters, configuration)
-
-  if (requestParam)
-    payload.parm = requestParam
+  payload.parm = getParameters(parameters, configuration)
 
   if (configuration.creds)
     payload.creds = configuration.creds
